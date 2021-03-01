@@ -41,6 +41,15 @@ async def on_ready():
     print(bcolors.OKCYAN + "[INFO]: " + bcolors.ENDC + "Bot ID: " + bcolors.OKCYAN + bcolors.HEADER + bcolors.ITALIC + "{bot_user_id}".format(bot_user_id = bot.user.id) + bcolors.ENDC)
     print('----------------------------------------------------------------------')  # Add a little seperator using hyphens (-).
 
+
+# EVENT - When a new member joins the server say their name and that they joined the server.
+@bot.event
+async def on_member_join(member)
+    # TODO: Make it have a green color and say [SERVER]:
+    print(f'{member} has joined the server!')
+
+
+# COMMAND - Adds two numbers given by the user and seperated by a space.
 @bot.command(name="add", help="Adds two numbers together")
 async def add(ctx, left: int, right: int):
     await ctx.send(left + right)
