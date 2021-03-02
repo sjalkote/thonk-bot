@@ -1,6 +1,7 @@
 # Main program files
 /key.txt
-
+*.db
+*.db journal
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
