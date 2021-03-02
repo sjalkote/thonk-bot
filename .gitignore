@@ -1,5 +1,5 @@
 # Main program files
-/key.txt
+/token.txt
 *.db
 *.db journal
 
