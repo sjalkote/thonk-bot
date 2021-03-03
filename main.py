@@ -8,6 +8,12 @@ from discord.ext import tasks  # Subset of discord
 import sys  # For system commands
 import logging  # For logging TODO: Set up logging
 import traceback  # For Errors
+import datetime  # For timestamps
+import time  # For time stuff
+import json  # For API stuff
+import urllib  # For API stuff
+import requests  # For API stuff
+import asyncio  # For timing stuff
 
 # Here we define the command prefix for the bot, as well as the bot description and intents.
 intents = discord.Intents.default()  # Simplify intents to intents.
@@ -21,6 +27,8 @@ bot = commands.Bot(command_prefix='?!', description='A simple bot by TechnoShip1
 with open('token.txt', 'r') as file:
     TOKEN = file.read().replace('\n', '')  # Assign the token to a str variable called TOKEN.
 
+
+# VARIABLES, CLASSES, FUNCTIONS ---------------------------------------------------------------------------------------------------
 
 # Here we make a class to add colorful words to the terminal using ANSI Escape Sequences.
 class bcolors:
@@ -36,8 +44,17 @@ class bcolors:
     ITALIC = '\033[3m'
 
 
+# Here is the function for the quoting command using the ZenQuotes API
+def get_quote():
+    response = requests.get("https://zenquotes.io/api/random")
+    json_data = json.loads(response.text)
+    quote = json_data[0]["q"] + " -" + json_data[0]["a"]
+    return quote
+
+
 # MAIN CODE -----------------------------------------------------------------------------------------------------------------------
 # Once we have all that set up, we send a message to the console letting us know the bot is ready and what login it uses.
+
 @bot.event
 async def on_ready():
     # Say that we logged in successfully, and give the username + userid that the bot has logged in as.
@@ -77,13 +94,76 @@ async def add(ctx, left: int, right: int):
 
 
 # COMMAND - Saves the command idea given from someone to a file.
-@bot.command(name="commandidea", aliases=["csuggest", "command_suggestion", "cidea"],
-             help="Suggests a command for me to add to the bot.")
-async def command_suggestion(ctx):
+@bot.command(name="suggest", help="Suggests a command for me to add to the bot.")
+async def suggest(ctx, *suggestion):  # The command suggestions command
     channel = bot.get_channel(816422364681470013)  # Define my suggestion channel.
-    await channel.send(ctx.message.content)  # Send the suggestion to my suggestion channel
+
+    # This section filters out the command so all I get back is the suggestion itself.
+    uMessage = ' '.join(suggestion)
+
+    embed = discord.Embed(
+        title="Command Suggestion",
+        description="A command suggestion was recieved:\n \n " + "`" + uMessage + "\n \n",
+        timestamp=datetime.datetime.now(datetime.timezone.utc)
+    )
+    embed.set_author(
+        name=ctx.author.name,
+        icon_url=ctx.author.avatar_url
+    )
+    embed.set_footer(
+        text="Requested by: " + ctx.author.name,
+        icon_url=ctx.author.avatar_url
+    )
+    await channel.send(embed=embed)
+
+    # Send it on the user's side
     await ctx.message.add_reaction('<a:checkmark:806962593457504296>')
-    await ctx.send("Your suggestion: ```" + ctx.message.content + "``` has been sent to Thonks idea pastebin!")
+    embed = discord.Embed(
+        title="Command Suggestion",
+        description="You suggested an improvement to the bot:\n \n " + "> " + uMessage + "\n \nIt was sent to Thonk's suggestion box!",
+        timestamp=datetime.datetime.now(datetime.timezone.utc)
+    )
+    embed.set_author(
+        name=ctx.author.name,
+        icon_url=ctx.author.avatar_url
+    )
+    embed.set_footer(
+        text="Requested by: " + ctx.author.name,
+        icon_url=ctx.author.avatar_url
+    )
+    await ctx.send(embed=embed)
+
+
+# COMMAND - Gives random quotes from a big collection provided by the ZenQuotes API
+@bot.command(name='quote', help="Gives a random inspirational quote from a giant collection provided by ZenQuotes.io")
+async def getZenquote(message):
+    quote = get_quote()
+    if quote == 'Too many requests. Obtain an auth key for unlimited access. -ZenQuotes.io':  # Check if we're reaching the limit on requests
+        await message.channel.send("Do you seriously need more quotes? Wait 30 seconds please")  # Since there is a limit on requests, this is added to notify that it needs 30 seconds
+    else:
+        await message.channel.send(quote)  # Send the quote that we randomly chose from ZenQuotes
+
+
+# COMMAND - Echoes back the user input
+@bot.command(name='echo', help='Says back what you say!')
+async def echo(ctx, *umessage):
+    await ctx.send(' '.join(umessage))  # TODO: Make it change `you` to `me` and stuff like that
+
+
+# COMMAND - Self promo, this is a Github command, gives a link to my GitHub profile (TechnoShip123)
+@bot.command(name="github", help="Gives the link to my GitHub profile")
+async def github(ctx):
+    embed = discord.Embed(title="TechnoShip123", url="http://github.com/TechnoShip123",
+                          description="The link for my github page", color=0x00ffbf, timestamp=datetime.datetime.now(datetime.timezone.utc))
+
+    embed.set_author(name="TechnoShip123", url="https://avatars.githubusercontent.com/u/75491816?s=460&u=f9d8a3cb1a09ed5cc5e918f04ff0e477bc0fadb9&v=4",
+                     icon_url="https://github.com/TechnoShip123/DiscordBot/blob/master/resources/GitHub-Mark-Light-32px.png?raw=true")
+
+    embed.set_thumbnail(url="https://avatars.githubusercontent.com/u/75491816?s=460&u=efc006f31ed85de2b464de18e5e71b3ffaf9800a&v=4")
+
+    embed.set_footer(text="Requested by: " + ctx.author.name, icon_url=ctx.author.avatar_url)
+
+    await ctx.send(embed=embed)
 
 
 # ERROR HANDLING ------------------------------------------------------------------------------------------------------------------
