@@ -1,7 +1,9 @@
-# Main program files
+# MAIN PROGRAM FILES
 /token.txt
+/test.py
 *.db
 *.db journal
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -19,7 +21,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+../oldthonkbot/lib/
 lib64/
 parts/
 sdist/
