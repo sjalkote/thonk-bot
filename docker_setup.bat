@@ -1,4 +1,10 @@
-docker con
+docker stop thonk-bot
+TIMEOUT 2
+
+docker container rm thonk-bot
+docker container ls
+TIMEOUT 2
+
 docker image rm thonk-bot
 echo "Removed old thonk-bot images!"
 TIMEOUT 1

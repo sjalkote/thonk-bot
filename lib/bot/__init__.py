@@ -41,7 +41,7 @@ class Bot(Bot):
         self.guild = None
         self.scheduler = AsyncIOScheduler()
 
-        super().__init__(command_prefix=PREFIX, owner_id=OWNER_ID, intents=Intents.all())
+        super().__init__(command_prefix=PREFIX, owner_id=OWNER_ID, intents=Intents.all())  # Basic setup, define the prefix, owner ID, and turn on intents.
 
     # Stuff to setup when we first run the bot.
     def run(self, version):
@@ -87,7 +87,7 @@ class Bot(Bot):
 
         # If no error handling is available for it, send the error.
         else:
-            await ctx.reply("Uh Oh! Looks like we got a weird error! ```" + exc + "``` Please tell my owner about this!")
+            await ctx.reply("Uh Oh! Looks like we got a weird error! ```" + exc + "```" + "<@!" + str(bot.owner_id) + ">" + "do something about this!")
             raise exc
 
 # ---------------------------------------------------------------------------------------------------------------------------------
@@ -97,9 +97,11 @@ class Bot(Bot):
             self.ready = True
             print(print_info + bcolors.OKGREEN + bcolors.BOLD + 'Bot is ready!' + bcolors.ENDC)
 
-            # Now set the bot is completely ready.
+            # Easy way to ping the bot or me (owner) in a mention, discord structures mentions like this.
             bot_mention = "<@!" + str(bot.user.id) + ">"
             owner_mention = "<@!" + str(bot.owner_id) + ">"
+
+            # Now set the bot is completely ready.
 
             channel = self.get_channel(819178732932956191)  # Thonk Bot Status Channel
             # Create a neat embed saying that the bot is online, as well as the timestamp, and a green color.
