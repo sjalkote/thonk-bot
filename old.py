@@ -20,8 +20,7 @@ intents = discord.Intents.default()  # Simplify intents to intents.
 intents.members = True  # Set intents for members to true. This will require verification if the bot is in more than 100 servers.
 
 # Set the bot prefix, description, intents on, and make it case insensitive.
-bot = commands.Bot(command_prefix='?!', description='A simple bot by TechnoShip123 (Thonk)', intents=intents,
-                   case_insensitive=True)
+bot = commands.Bot(command_prefix='?!', description='A simple bot by TechnoShip123 (Thonk).', intents=intents, case_insensitive=True)
 
 # We also want to get our bot token/key from our `token.txt` file. Putting it in directly in the source code would not be safe.
 with open('token.txt', 'r') as file:
@@ -55,6 +54,7 @@ def get_quote():
 # MAIN CODE -----------------------------------------------------------------------------------------------------------------------
 # Once we have all that set up, we send a message to the console letting us know the bot is ready and what login it uses.
 
+# Notify and set status when the bot is ready.
 @bot.event
 async def on_ready():
     # Say that we logged in successfully, and give the username + userid that the bot has logged in as.
@@ -69,19 +69,15 @@ async def on_ready():
 
     # Here we set the bot's status, there is Playing, Watching, Listening to, Streaming, and Competing in.
     await bot.change_presence(
-        activity=discord.Activity(type=discord.ActivityType.watching, name="your every move | ?!"))
-    # await bot.change_presence(activity=discord.Streaming(name="and watching for ?!", url='https://www.twitch.tv/morshu_beatbox'))
-    print(bcolors.OKCYAN + "[INFO]: " + bcolors.ENDC + bcolors.OKGREEN + "Bot status added! " + bcolors.ENDC)
-    print(
-        '----------------------------------------------------------------------')  # Add a little seperator using hyphens (-).
+        activity=discord.Activity(type=discord.ActivityType.watching, name="you. | ?!help"))
+    print(bcolors.OKCYAN + "[INFO]: " + bcolors.ENDC + bcolors.OKGREEN + "Bot status set! " + bcolors.ENDC)
+    print('----------------------------------------------------------------------')  # Add a little seperator using hyphens (-).
 
 
 # EVENT - When a new member joins the server say their name and that they joined the server.
 @bot.event
 async def on_member_join(member):
-    # TODO: Make it have a green color and say [SERVER]:
-    print(
-        bcolors.OKGREEN + "[SERVER]: " + bcolors.ENDC + bcolors.HEADER + f'{member}' + bcolors.ENDC + ' has joined the server!')
+    print(bcolors.OKGREEN + "[SERVER]: " + bcolors.ENDC + bcolors.HEADER + f'{member}' + bcolors.ENDC + ' has joined the server!')
 
 
 # COMMAND - Adds two numbers given by the user and seperated by a space.
@@ -93,7 +89,7 @@ async def add(ctx, left: int, right: int):
     # This one could be: `await ctx.send("Invalid input. Try: `?!add 5 10` to add 5 + 10.")` (don't forget return)
 
 
-# COMMAND - Saves the command idea given from someone to a file.
+# COMMAND - Saves the command idea given from someone to my pastebin.
 @bot.command(name="suggest", help="Suggests a command for me to add to the bot.")
 async def suggest(ctx, *suggestion):  # The command suggestions command
     channel = bot.get_channel(816422364681470013)  # Define my suggestion channel.
@@ -147,7 +143,8 @@ async def getZenquote(message):
 # COMMAND - Echoes back the user input
 @bot.command(name='echo', help='Says back what you say!')
 async def echo(ctx, *umessage):
-    await ctx.send(' '.join(umessage))  # TODO: Make it change `you` to `me` and stuff like that
+    umessage = ''.join(umessage)
+    await ctx.send(umessage)  # TODO: Make it change `you` to `me` and stuff like that
 
 
 # COMMAND - Self promo, this is a Github command, gives a link to my GitHub profile (TechnoShip123)
@@ -196,9 +193,10 @@ async def on_command_error(ctx, error):
         await ctx.send('This command has been disabled.')
         return
 
-    # If the command is on cooldown while being asked again from a user.
-    if isinstance(error, commands.CommandOnCooldown):
-        await ctx.send("This command is on cooldown, please retry in {}s.".format(math.ceil(error.retry_after)))
+    # If the command is on cooldown when the user requests it.
+    if isinstance(exc, commands.CommandOnCooldown):
+        await ctx.message.add_reaction('🕐')
+        await ctx.send("This command is on cooldown, please retry in {}s.".format(math.ceil(exc.retry_after)))
         # TODO: Make it delete the message after a few seconds here.
         return
 
