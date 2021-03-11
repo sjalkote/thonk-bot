@@ -105,7 +105,8 @@ class Bot(Bot):
 
             # Now set the bot is completely ready.
 
-            channel = self.get_channel(819178732932956191)  # Thonk Bot Status Channel
+            # Set it to send to: Bot Creator's Bot-Spam Channel (MDSP) and Thonk-Bot Status Channel (Bot Server)
+            channels = [self.get_channel(796492337789403156), self.get_channel(819178732932956191)]
             # Create a neat embed saying that the bot is online, as well as the timestamp, and a green color.
             embed = Embed(
                 title="Bot Online!",
@@ -124,7 +125,8 @@ class Bot(Bot):
                 text="Online Notifier",
                 icon_url='https://cdn.discordapp.com/avatars/815078851780542484/a10e59ac12b66984453e299e8cb89a8a.png?size=256'
             )
-            await channel.send(embed=embed)
+            for channel in channels:
+                await channel.send(embed=embed)  # Send the online message to the botcreators channel and the update channel.
 
         else:
             print("bot reconnected")
