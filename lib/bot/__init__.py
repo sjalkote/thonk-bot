@@ -28,6 +28,7 @@ class bcolors:
 
 
 print_info = bcolors.OKCYAN + bcolors.BOLD + "[INFO]: " + bcolors.ENDC
+print_warn = bcolors.FAIL + bcolors.BOLD + "[WARN]: " + bcolors.ENDC
 # TODO: Make a list of these
 
 
@@ -67,7 +68,7 @@ class Bot(Bot):
 
     # When the bot disconnects/stops.
     async def on_disconnect(self):
-        print("bot disconnected")
+        print(print_warn + bcolors.WARNING + "The bot has" + bcolors.BOLD + "disconnected!" + bcolors.ENDC)
 
 # ERROR HANDLING ------------------------------------------------------------------------------------------------------------------
     async def on_error(self, err, *args, **kwargs):
@@ -96,6 +97,7 @@ class Bot(Bot):
         if not self.ready:
             self.ready = True
             print(print_info + bcolors.OKGREEN + bcolors.BOLD + 'Bot is ready!' + bcolors.ENDC)
+            print('-----------------------------------------------------------------------------------------------------------------')
 
             # Easy way to ping the bot or me (owner) in a mention, discord structures mentions like this.
             bot_mention = "<@!" + str(bot.user.id) + ">"
