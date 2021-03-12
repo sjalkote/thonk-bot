@@ -116,9 +116,11 @@ class Bot(Bot):
         elif hasattr(exc, "original"):
             raise exc.original
 
+        # If the command is currently on a cooldown.
         elif isinstance(exc, CommandOnCooldown):
             await ctx.reply("Sorry! That command is currently on a cooldown!")
 
+        # If the command is missing a required argument, like the remind command missing the duration.
         elif isinstance(exc, MissingRequiredArgument):
             await ctx.reply("Uh oh! You're missing a required argument! Try `?!help <command_name>` to see the correct usage of that command!")
 
