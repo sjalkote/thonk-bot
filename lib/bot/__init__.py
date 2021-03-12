@@ -43,7 +43,7 @@ class Ready:
 
     def ready_up(self, cog):
         setattr(self, cog, True)
-        print(print_cog + print_spec + f"{cog}" + bcolors.ENDC + " cog ready")  # TODO: Prettify this
+        print(print_cog + print_spec + f"{cog}" + bcolors.ENDC + " cog ready")
 
     def all_ready(self):
         return all([getattr(self, cog) for cog in COGS])
@@ -115,6 +115,12 @@ class Bot(Bot):
         # If it has the attribute `original`
         elif hasattr(exc, "original"):
             raise exc.original
+
+        elif isinstance(exc, CommandOnCooldown):
+            await ctx.reply("Sorry! That command is currently on a cooldown!")
+
+        elif isinstance(exc, MissingRequiredArgument):
+            await ctx.reply("Uh oh! You're missing a required argument! Try `?!help <command_name>` to see the correct usage of that command!")
 
         # If no error handling is available for it, send the error.
         else:
