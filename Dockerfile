@@ -1,11 +1,6 @@
 FROM python:3
 WORKDIR /usr/src/app
 COPY . .
-RUN pip install discord[voice]
-RUN pip install PyNaCl
-RUN pip install requests
-RUN pip install datetime
-RUN pip install asyncio
-RUN pip install apscheduler
+RUN pip install discord[voice] PyNaCl requests datetime asyncio apscheduler
 CMD ["launcher.py"]
 ENTRYPOINT ["python3"]
