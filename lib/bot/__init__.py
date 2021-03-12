@@ -36,6 +36,16 @@ print_cog = bcolors.OKGREEN + bcolors.BOLD + "[COG]: " + bcolors.ENDC
 print_spec = bcolors.OKBLUE + bcolors.ITALIC
 
 
+# A conversion command for seconds into hours:minutes:seconds.
+def convert(seconds):
+    seconds = seconds % (24 * 3600)
+    hour = seconds // 3600
+    seconds %= 3600
+    minutes = seconds // 60
+    seconds %= 60
+    return "%d:%02d:%02d" % (hour, minutes, seconds)
+
+
 class Ready:
     def __init__(self):
         for cog in COGS:
@@ -109,7 +119,10 @@ class Bot(Bot):
     async def on_command_error(self, ctx, exc):
         # If the command does not exist/is not found.
         if isinstance(exc, CommandNotFound):
-            await ctx.reply("Sorry! That command does not currently exist!")
+            await ctx.message.add_reaction("<:denied:806962608912597002>")
+            message = await ctx.reply("Sorry! That command does not currently exist! You can use `?!suggest` to suggest a command!")
+            await sleep(5)
+            await message.delete()
             pass
 
         # If it has the attribute `original`
@@ -118,16 +131,25 @@ class Bot(Bot):
 
         # If the command is currently on a cooldown.
         elif isinstance(exc, CommandOnCooldown):
-            await ctx.reply("Sorry! That command is currently on a cooldown!")
+            cooldown_remaining = exc.retry_after  # Assign the remaining cooldown duration (in seconds) to a variable.
+            if cooldown_remaining > 60:  # Only if the cooldown is greater than 60 seconds...
+                cooldown_remaining = convert(cooldown_remaining)  # Use our convert function to convert the seconds into H:M:S format.
+            else:
+                cooldown_remaining = str(round(cooldown_remaining)) + " seconds"
+            await ctx.message.add_reaction('⏱')  # Also try hourglass (⌛). This adds a reaction to the user's message.
+            message = await ctx.reply(f"Sorry! That command is currently on a cooldown! Please try again after {cooldown_remaining}!")  # Reply with the time remaining for the cooldown.
+            await sleep(5)
+            await message.delete()
 
         # If the command is missing a required argument, like the remind command missing the duration.
         elif isinstance(exc, MissingRequiredArgument):
+            await ctx.message.add_reaction("<:denied:806962608912597002>")
             await ctx.reply("Uh oh! You're missing a required argument! Try `?!help <command_name>` to see the correct usage of that command!")
 
         # If no error handling is available for it, send the error.
         else:
             await ctx.reply("Uh Oh! Looks like we got a weird error! ```" + exc + "```" + "<@!" + str(bot.owner_id) + ">" + "do something about this!")
-            raise exc
+            raise exc  # So we see this in the terminal.
 
     # ---------------------------------------------------------------------------------------------------------------------------------
     # When the bot is fully ready.
