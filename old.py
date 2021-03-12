@@ -6,7 +6,7 @@ import discord  # For the entire thing
 from discord.ext import commands  # Subset of discord
 from discord.ext import tasks  # Subset of discord
 import sys  # For system commands
-import logging  # For logging TODO: Set up logging
+import logging  # For logging
 import traceback  # For Errors
 import datetime  # For timestamps
 import time  # For time stuff

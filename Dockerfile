@@ -4,6 +4,7 @@ COPY . .
 RUN pip install discord[voice]
 RUN pip install PyNaCl
 RUN pip install requests
+RUN pip install datetime
 RUN pip install asyncio
 RUN pip install apscheduler
 CMD ["launcher.py"]

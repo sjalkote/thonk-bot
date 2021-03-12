@@ -12,6 +12,8 @@ from ..db import db
 PREFIX = "?!"
 OWNER_ID = '755093458586173531'
 
+COGS = ["utility"]  # Update this when you add more cogs.
+
 
 # Here we make a class to add colorful words to the terminal using ANSI Escape Sequences.
 class bcolors:
@@ -28,10 +30,23 @@ class bcolors:
 
 
 print_info = bcolors.OKCYAN + bcolors.BOLD + "[INFO]: " + bcolors.ENDC
-print_scheduler = bcolors.OKCYAN + bcolors.BOLD + "[SCHEDULER]: " + bcolors.ENDC
-print_spec = bcolors.OKBLUE + bcolors.ITALIC
 print_warn = bcolors.FAIL + bcolors.BOLD + "[WARN]: " + bcolors.ENDC
-# TODO: Make a list of these
+print_scheduler = bcolors.OKCYAN + bcolors.BOLD + "[SCHEDULER]: " + bcolors.ENDC
+print_cog = bcolors.OKGREEN + bcolors.BOLD + "[COG]: " + bcolors.ENDC
+print_spec = bcolors.OKBLUE + bcolors.ITALIC
+
+
+class Ready:
+    def __init__(self):
+        for cog in COGS:
+            setattr(self, cog, False)
+
+    def ready_up(self, cog):
+        setattr(self, cog, True)
+        print(print_cog + print_spec + f"{cog}" + bcolors.ENDC + " cog ready")  # TODO: Prettify this
+
+    def all_ready(self):
+        return all([getattr(self, cog) for cog in COGS])
 
 
 class Bot(Bot):
@@ -40,6 +55,7 @@ class Bot(Bot):
             self.TOKEN = tokenfile.read()
 
         self.ready = False
+        self.cogs_ready = Ready()
         self.PREFIX = PREFIX
         self.guild = None
         self.scheduler = AsyncIOScheduler()
@@ -47,11 +63,22 @@ class Bot(Bot):
         db.autosave(self.scheduler)
         super().__init__(command_prefix=PREFIX, owner_id=OWNER_ID, intents=Intents.all())  # Basic setup, define the prefix, owner ID, and turn on intents.
 
+    # Setup
+    def setup(self):
+        cog_amount = 0  # Set the cog counter to 0.
+        for cog in COGS:  # Do this for every cog there is.
+            self.load_extension(f"lib.cogs.{cog}")  # Load the cog from lib.cogs, CHANGE IF DIRECTORY STRUCTURE CHANGES.
+            cog_amount += 1  # Raise the counter by one (the first cog will say 1 cog loaded instead of 0).
+            # <cogname> loaded! (1)
+            print(print_cog + print_spec + f"{cog}" + bcolors.ENDC + " loaded! (" + bcolors.HEADER + f"{cog_amount}" + bcolors.ENDC + ")")
+        print(print_cog + "All cogs have been loaded! We have a total of " + bcolors.HEADER + f"{cog_amount}" + bcolors.ENDC + " cogs.")
+
     # Stuff to setup when we first run the bot.
     def run(self, version):
 
-        print(print_info + "Running the " + print_spec + "setup..." + bcolors.ENDC)
+        print(print_info + "Running " + print_spec + "setup..." + bcolors.ENDC)
         self.VERSION = version
+        self.setup()
 
         print(print_info + bcolors.OKGREEN + bcolors.BOLD + "Setup Complete!" + bcolors.ENDC)
         print(print_info + "Attempting " + print_spec + "login..." + bcolors.ENDC)
@@ -71,9 +98,9 @@ class Bot(Bot):
 
     # When the bot disconnects/stops.
     async def on_disconnect(self):
-        print(print_warn + bcolors.WARNING + "The bot has" + bcolors.BOLD + "disconnected!" + bcolors.ENDC)
+        print(print_warn + bcolors.WARNING + "The bot has " + bcolors.BOLD + "disconnected!" + bcolors.ENDC)
 
-# ERROR HANDLING ------------------------------------------------------------------------------------------------------------------
+    # ERROR HANDLING ------------------------------------------------------------------------------------------------------------------
     async def on_error(self, err, *args, **kwargs):
         if err == "on_command_error":
             await args[0].send("Something went wrong!")
@@ -94,10 +121,15 @@ class Bot(Bot):
             await ctx.reply("Uh Oh! Looks like we got a weird error! ```" + exc + "```" + "<@!" + str(bot.owner_id) + ">" + "do something about this!")
             raise exc
 
-# ---------------------------------------------------------------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------------------------------------------------------------
     # When the bot is fully ready.
     async def on_ready(self):
         if not self.ready:
+            # Wait for the cogs to be ready, let the bot start with everything ready to go at once.
+            while not self.cogs_ready.all_ready():
+                await sleep(0.5)
+            while not self.cogs_ready.all_ready():
+                await sleep(0.5)
             self.ready = True
             # SCHEDULER TEST, it will add the test_schedule job at the specified time (second=).
             # NOTE - The below says `second="0,15"`. What that means is that any minute, whenever the seconds is = 0 or 15, it will add the job.
@@ -110,7 +142,7 @@ class Bot(Bot):
 
             print(print_info + bcolors.OKBLUE + bcolors.ITALIC + 'Scheduler' + bcolors.ENDC + ' started!')
             print(print_info + bcolors.OKGREEN + bcolors.BOLD + 'Bot is ready!' + bcolors.ENDC)
-            print('-----------------------------------------------------------------------------------------------------------------')
+            # print('-----------------------------------------------------------------------------------------------------------------')
 
             # Easy way to ping the bot or me (owner) in a mention, discord structures mentions like this.
             bot_mention = "<@!" + str(bot.user.id) + ">"
@@ -142,12 +174,12 @@ class Bot(Bot):
                 await channel.send(embed=embed)  # Send the online message to the botcreators channel and the update channel.
 
         else:
-            print("bot reconnected")
+            print(print_info + "The bot has successfully " + bcolors.OKGREEN + "reconnected" + bcolors.ENDC + "!")
 
     # A test for the scheduling functionality, the scheduler will do this at the specified time.
-    async def test_schedule(self):
-        channel = self.get_channel(819727424659914762)
-        await channel.send('This is a scheduled message, the bot is working fine!')
+    # async def test_schedule(self):
+    # channel = self.get_channel(819727424659914762)
+    # await channel.send('This is a scheduled message, the bot is working fine!')
 
 
 bot = Bot()
