@@ -28,6 +28,8 @@ class bcolors:
 
 
 print_info = bcolors.OKCYAN + bcolors.BOLD + "[INFO]: " + bcolors.ENDC
+print_scheduler = bcolors.OKCYAN + bcolors.BOLD + "[SCHEDULER]: " + bcolors.ENDC
+print_spec = bcolors.OKBLUE + bcolors.ITALIC
 print_warn = bcolors.FAIL + bcolors.BOLD + "[WARN]: " + bcolors.ENDC
 # TODO: Make a list of these
 
@@ -42,16 +44,17 @@ class Bot(Bot):
         self.guild = None
         self.scheduler = AsyncIOScheduler()
 
+        db.autosave(self.scheduler)
         super().__init__(command_prefix=PREFIX, owner_id=OWNER_ID, intents=Intents.all())  # Basic setup, define the prefix, owner ID, and turn on intents.
 
     # Stuff to setup when we first run the bot.
     def run(self, version):
 
-        print(print_info + "Running the " + bcolors.OKBLUE + bcolors.ITALIC + "setup..." + bcolors.ENDC)
+        print(print_info + "Running the " + print_spec + "setup..." + bcolors.ENDC)
         self.VERSION = version
 
         print(print_info + bcolors.OKGREEN + bcolors.BOLD + "Setup Complete!" + bcolors.ENDC)
-        print(print_info + "Attempting " + bcolors.OKBLUE + bcolors.ITALIC + "login..." + bcolors.ENDC)
+        print(print_info + "Attempting " + print_spec + "login..." + bcolors.ENDC)
         super().run(self.TOKEN, reconnect=True)
 
     # When the bot connects.
@@ -96,6 +99,16 @@ class Bot(Bot):
     async def on_ready(self):
         if not self.ready:
             self.ready = True
+            # SCHEDULER TEST, it will add the test_schedule job at the specified time (second=).
+            # NOTE - The below says `second="0,15"`. What that means is that any minute, whenever the seconds is = 0 or 15, it will add the job.
+            # This means it won't send at 30 seconds or at 45 seconds. For example, 12:30:0 and 12:30:15 would send, but not at 12:30:30 and 12:30:45.
+            # This also accepts things such as `day_of_week=0` (Sundays), `hour=12` (12:00 and 24:00), and `minute=0` (12:00 and 12:01) as well.
+
+            # self.scheduler.add_job(self.test_schedule, CronTrigger(second="0, 15"))
+            # print(print_scheduler + "Job Added: " + print_spec + "test_schedule" + bcolors.ENDC)
+            self.scheduler.start()
+
+            print(print_info + bcolors.OKBLUE + bcolors.ITALIC + 'Scheduler' + bcolors.ENDC + ' started!')
             print(print_info + bcolors.OKGREEN + bcolors.BOLD + 'Bot is ready!' + bcolors.ENDC)
             print('-----------------------------------------------------------------------------------------------------------------')
 
@@ -130,6 +143,11 @@ class Bot(Bot):
 
         else:
             print("bot reconnected")
+
+    # A test for the scheduling functionality, the scheduler will do this at the specified time.
+    async def test_schedule(self):
+        channel = self.get_channel(819727424659914762)
+        await channel.send('This is a scheduled message, the bot is working fine!')
 
 
 bot = Bot()
