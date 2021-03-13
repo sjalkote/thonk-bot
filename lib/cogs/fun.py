@@ -16,7 +16,7 @@ class Fun(Cog):
         self.bot = bot
 
     # Hit/Bonk command, fun way to 'hit' others for the specified reason (defaults to no reason if nothing is provided).
-    # TODO: Custom error handling for member not found, make it so that it's allowed.
+    # TODO: Custom error handling for member not found, make it so that it's allowed. Also add custom reasons if no reason.
     @commands.command(name="bonk", help="'Bonk' someone with objects for specified reasons!")
     async def hit(self, ctx, member: MemberConverter, *, reason: Optional[str] = "no reason"):
         await ctx.message.delete()
