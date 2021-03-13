@@ -15,6 +15,7 @@ class Utility(Cog):
         self.bot = bot
 
     # THE REMINDER COMMAND. Specify when you want to be reminded, and the bot will ping you on that time.
+    # TODO: Make the cooldown ONLY IF THE COMMAND FAILS, such as if someone put a time that was too short or in an invalid format.
     @commands.cooldown(1, 150, commands.BucketType.user)  # Cooldown of 1 use every 150 seconds per user.
     @command(name="remind", aliases=["reminder, remindme"], help="This command allows you to set a remind from 5 minutes to 7 days! Specify your value like 5m for 5 minutes.")
     async def remind(self, ctx, time, *, reminder):
