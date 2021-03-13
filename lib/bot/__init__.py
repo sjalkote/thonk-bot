@@ -12,7 +12,7 @@ from ..db import db
 PREFIX = "?!"
 OWNER_ID = '755093458586173531'
 
-COGS = ["utility"]  # Update this when you add more cogs.
+COGS = ["utility", "fun"]  # Update this when you add more cogs.
 
 
 # Here we make a class to add colorful words to the terminal using ANSI Escape Sequences.
@@ -62,7 +62,7 @@ class Ready:
 class Bot(Bot):
     def __init__(self):
         with open("./lib/bot/token.txt", "r", encoding="utf-8") as tokenfile:
-            self.TOKEN = tokenfile.read()
+            self.TOKEN = tokenfile.readline()
 
         self.ready = False
         self.cogs_ready = Ready()
@@ -120,7 +120,7 @@ class Bot(Bot):
         # If the command does not exist/is not found.
         if isinstance(exc, CommandNotFound):
             await ctx.message.add_reaction("<:denied:806962608912597002>")
-            message = await ctx.reply("Sorry! That command does not currently exist! You can use `?!suggest` to suggest a command!")
+            message = await ctx.reply("Sorry! That command does not currently exist! You can use `?!help` to view available commands!")
             await sleep(5)
             await message.delete()
             pass
@@ -145,6 +145,11 @@ class Bot(Bot):
         elif isinstance(exc, MissingRequiredArgument):
             await ctx.message.add_reaction("<:denied:806962608912597002>")
             await ctx.reply("Uh oh! You're missing a required argument! Try `?!help <command_name>` to see the correct usage of that command!")
+
+        elif isinstance(exc, MemberNotFound):
+            message = await ctx.send("Couldn't find that member!")
+            await sleep(5)
+            await message.delete()
 
         # If no error handling is available for it, send the error.
         else:
