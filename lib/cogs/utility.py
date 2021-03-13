@@ -8,6 +8,7 @@ from discord.ext import commands
 from discord.ext import tasks
 from lib.bot.__init__ import bcolors
 from lib.bot.__init__ import print_info, print_spec, print_cog, print_scheduler, print_warn
+# -------------------------------------------------------------------------------------------------------------------------------
 
 
 class Utility(Cog):
@@ -86,7 +87,7 @@ class Utility(Cog):
         if not self.bot.ready:
             self.bot.cogs_ready.ready_up("utility")
 
-            # We can comment this out later if wanted.
+            # We can comment this out later if needed.
             print(print_cog + print_spec + "Utility " + bcolors.ENDC + "cog started!")
 
 
