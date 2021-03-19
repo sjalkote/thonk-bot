@@ -1,6 +1,5 @@
 from asyncio import sleep
 import datetime
-
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from discord import *
@@ -97,11 +96,9 @@ class Bot(Bot):
     # When the bot connects.
     async def on_connect(self):
         # Say that we logged in successfully, and give the username + userid that the bot has logged in as.
+        print(f"{print_info}{bcolors.OKGREEN}{bcolors.BOLD}Successful Connection! {bcolors.ENDC}")
         print(
-            print_info + bcolors.OKGREEN + bcolors.BOLD + "Successful Connection! " + bcolors.ENDC)
-        print(
-            print_info + "Logged in as: " + bcolors.OKCYAN + bcolors.HEADER + bcolors.ITALIC + "{bot_username}".format(
-                bot_username=bot.user.name) + bcolors.ENDC)
+            print_info + "Logged in as: " + bcolors.OKCYAN + bcolors.HEADER + bcolors.ITALIC + f"{bot_username}" + bcolors.ENDC)
         print(
             print_info + "Bot ID: " + bcolors.OKCYAN + bcolors.HEADER + bcolors.ITALIC + "{bot_user_id}".format(
                 bot_user_id=bot.user.id) + bcolors.ENDC)

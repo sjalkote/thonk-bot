@@ -92,75 +92,43 @@ class Utility(Cog):
     @command(name="mcserver", help="Allows you to check the status of any specified Minecraft Server!")
     async def mcserver(self, ctx, argument: str):
         # Pull the ip/text they sent (auto seperated from command).
-        if argument == "available":
-            await ctx.reply("Available servers:\nHypixel`\nIf you have something else in mind, just type in the ip after the command!")
+        server_ip = argument
+        await ctx.message.add_reaction("<a:thonkload:820298504634105866>")
+        message = await ctx.send("<a:thonkload:820298504634105866> One moment, retrieving server information...")
+
+        response = urllib.request.urlopen(f"https://api.mcsrvstat.us/2/{server_ip}")
+        data = json.load(response)
+        online: bool = data['debug']['ping']  # Check if it's online.
+        if online:
+            motd: str = data['motd']['clean'][0].strip()
+            version: int = data['version']
+            online_players: int = data['players']['online']
+            max_players: int = data['players']['max']
+            ip: str = data['ip']
+
+            embed = discord.Embed(
+                title="<a:MinecraftGrassBlock:820298284228542484> MC Server Status <a:MinecraftGrassBlock:820298284228542484>",
+                color=0x00ff2a)
+            embed.set_author(name="Minecraft", url="https://minecraft.net/",
+                             icon_url="https://static.wikia.nocookie.net/minecraft_gamepedia/images/2/2d/Plains_Grass_Block.png/revision/latest?cb=20190525093706")
+            embed.add_field(name="MOTD", value=motd, inline=True)
+            embed.add_field(name="Version", value=str(version), inline=True)
+            embed.add_field(name="Online Player Count", value=str(online_players), inline=True)
+            embed.add_field(name="Max Players", value=str(max_players), inline=True)
+            embed.add_field(name="Server IP", value=server_ip + " (IP: `" + str(ip) + "`)", inline=True)
+
+            embed.set_footer(text="Requested by: " + ctx.author.name)
+            await ctx.send(embed=embed)
         else:
-            if argument.lower() == "hypixel":  # If they're looking for Hypixel's status.
-                server_ip = "mc.hypixel.net"  # Add Hypixel's IP
-                await ctx.message.add_reaction("<a:thonkload:820298504634105866>")
-                message = await ctx.send("<a:thonkload:820298504634105866> One moment, retrieving server information...")
+            embed = discord.Embed(
+                title="<a:MinecraftGrassBlock:820298284228542484> MC Server Status <a:MinecraftGrassBlock:820298284228542484>",
+                color=0x00ff2a,
+                description="The server is offline or the IP is invalid!")
+            embed.set_author(name="Minecraft", url="https://minecraft.net/",
+                             icon_url="https://static.wikia.nocookie.net/minecraft_gamepedia/images/2/2d/Plains_Grass_Block.png/revision/latest?cb=20190525093706", )
 
-                response = urllib.request.urlopen(f"https://api.mcsrvstat.us/2/{server_ip}")
-                data = json.load(response)
-                online: bool = data['debug']['ping']  # Check if it's online.
-                if online:
-                    motd: str = data['motd']['clean'][0].strip()
-                    version: int = data['version']
-                    online_players: int = data['players']['online']
-                    max_players: int = data['players']['max']
-                    ip: str = data['ip']
-
-                    embed = discord.Embed(
-                        title="<a:MinecraftGrassBlock:820298284228542484> MC Server Status <a:MinecraftGrassBlock:820298284228542484>",
-                        color=0x00ff2a)
-                    embed.set_author(name="Minecraft", url="https://minecraft.net/",
-                                     icon_url="https://static.wikia.nocookie.net/minecraft_gamepedia/images/2/2d/Plains_Grass_Block.png/revision/latest?cb=20190525093706")
-                    embed.add_field(name="MOTD", value=motd, inline=True)
-                    embed.add_field(name="Version", value=str(version), inline=True)
-                    embed.add_field(name="Online Player Count", value=str(online_players), inline=True)
-                    embed.add_field(name="Max Players", value=str(max_players), inline=True)
-                    embed.add_field(name="Server IP", value=server_ip + " (IP: `" + str(ip) + "`)", inline=True)
-
-                    embed.set_footer(text="Requested by: " + ctx.author.name)
-                    await ctx.send(embed=embed)
-            else:
-                server_ip = argument
-                await ctx.message.add_reaction("<a:thonkload:820298504634105866>")
-                message = await ctx.send("<a:thonkload:820298504634105866> One moment, retrieving server information...")
-
-                response = urllib.request.urlopen(f"https://api.mcsrvstat.us/2/{server_ip}")
-                data = json.load(response)
-                online: bool = data['debug']['ping']  # Check if it's online.
-                if online:
-                    motd: str = data['motd']['clean'][0].strip()
-                    version: int = data['version']
-                    online_players: int = data['players']['online']
-                    max_players: int = data['players']['max']
-                    ip: str = data['ip']
-
-                    embed = discord.Embed(
-                        title="<a:MinecraftGrassBlock:820298284228542484> MC Server Status <a:MinecraftGrassBlock:820298284228542484>",
-                        color=0x00ff2a)
-                    embed.set_author(name="Minecraft", url="https://minecraft.net/",
-                                     icon_url="https://static.wikia.nocookie.net/minecraft_gamepedia/images/2/2d/Plains_Grass_Block.png/revision/latest?cb=20190525093706")
-                    embed.add_field(name="MOTD", value=motd, inline=True)
-                    embed.add_field(name="Version", value=str(version), inline=True)
-                    embed.add_field(name="Online Player Count", value=str(online_players), inline=True)
-                    embed.add_field(name="Max Players", value=str(max_players), inline=True)
-                    embed.add_field(name="Server IP", value=server_ip + " (IP: `" + str(ip) + "`)", inline=True)
-
-                    embed.set_footer(text="Requested by: " + ctx.author.name)
-                    await ctx.send(embed=embed)
-                else:
-                    embed = discord.Embed(
-                        title="<a:MinecraftGrassBlock:820298284228542484> MC Server Status <a:MinecraftGrassBlock:820298284228542484>",
-                        color=0x00ff2a,
-                        description="The server is offline or the IP is invalid!")
-                    embed.set_author(name="Minecraft", url="https://minecraft.net/",
-                                     icon_url="https://static.wikia.nocookie.net/minecraft_gamepedia/images/2/2d/Plains_Grass_Block.png/revision/latest?cb=20190525093706", )
-
-                    embed.set_footer(text="Requested by: " + ctx.author.name)
-                    await ctx.send(embed=embed)
+            embed.set_footer(text="Requested by: " + ctx.author.name)
+            await ctx.send(embed=embed)
 
     @Cog.listener()
     async def on_ready(self):
