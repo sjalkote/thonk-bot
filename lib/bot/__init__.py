@@ -1,6 +1,5 @@
 from asyncio import sleep
 import datetime
-
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from discord import *
@@ -71,7 +70,7 @@ class Bot(Bot):
         self.scheduler = AsyncIOScheduler()
 
         db.autosave(self.scheduler)
-        super().__init__(command_prefix=PREFIX, owner_id=OWNER_ID, intents=Intents.all())  # Basic setup, define the prefix, owner ID, and turn on intents.
+        super().__init__(command_prefix=PREFIX, owner_id=OWNER_ID, intents=Intents.all(), help_command=None)  # Basic setup, define the prefix, owner ID, and turn on intents.
 
     # Setup
     def setup(self):
@@ -97,11 +96,9 @@ class Bot(Bot):
     # When the bot connects.
     async def on_connect(self):
         # Say that we logged in successfully, and give the username + userid that the bot has logged in as.
+        print(f"{print_info}{bcolors.OKGREEN}{bcolors.BOLD}Successful Connection! {bcolors.ENDC}")
         print(
-            print_info + bcolors.OKGREEN + bcolors.BOLD + "Successful Connection! " + bcolors.ENDC)
-        print(
-            print_info + "Logged in as: " + bcolors.OKCYAN + bcolors.HEADER + bcolors.ITALIC + "{bot_username}".format(
-                bot_username=bot.user.name) + bcolors.ENDC)
+            print_info + "Logged in as: " + bcolors.OKCYAN + bcolors.HEADER + bcolors.ITALIC + str(bot.user) + bcolors.ENDC)
         print(
             print_info + "Bot ID: " + bcolors.OKCYAN + bcolors.HEADER + bcolors.ITALIC + "{bot_user_id}".format(
                 bot_user_id=bot.user.id) + bcolors.ENDC)
@@ -144,7 +141,7 @@ class Bot(Bot):
         # If the command is missing a required argument, like the remind command missing the duration.
         elif isinstance(exc, MissingRequiredArgument):
             await ctx.message.add_reaction("<:denied:806962608912597002>")
-            await ctx.reply("Uh oh! You're missing a required argument! Try `?!help <command_name>` to see the correct usage of that command!")
+            await ctx.reply("Uh oh! You're missing a required argument!")
 
         elif isinstance(exc, MemberNotFound):
             message = await ctx.send("Couldn't find that member!")
@@ -153,7 +150,13 @@ class Bot(Bot):
 
         # If no error handling is available for it, send the error.
         else:
-            await ctx.reply("Uh Oh! Looks like we got a weird error! ```" + exc + "```" + "<@!" + str(bot.owner_id) + ">" + "do something about this!")
+            try:
+                await ctx.send(f"We hit an error! <@!755093458586173531> " + f"""Error:```{exc}```""")
+            except Exception as criticalexception:
+                print(f"""{bcolors.FAIL + bcolors.BOLD}Couldn't send error message. error:
+            {criticalexception}{bcolors.ENDC}""")
+            finally:
+                print(f"{bcolors.FAIL}[ERROR]: {exc}{bcolors.ENDC}")
             raise exc  # So we see this in the terminal.
 
     # ---------------------------------------------------------------------------------------------------------------------------------
@@ -178,43 +181,6 @@ class Bot(Bot):
             print(print_info + bcolors.OKBLUE + bcolors.ITALIC + 'Scheduler' + bcolors.ENDC + ' started!')
             print(print_info + bcolors.OKGREEN + bcolors.BOLD + 'Bot is ready!' + bcolors.ENDC)
             # print('-----------------------------------------------------------------------------------------------------------------')
-
-            # Easy way to ping the bot or me (owner) in a mention, discord structures mentions like this.
-            bot_mention = "<@!" + str(bot.user.id) + ">"
-            owner_mention = "<@!" + str(bot.owner_id) + ">"
-
-            # Now set the bot is completely ready.
-
-            # Set it to send to: Bot Creator's Bot-Spam Channel (MDSP) and Thonk-Bot Status Channel (Bot Server)
-            channels = [self.get_channel(796492337789403156), self.get_channel(819178732932956191)]
-            # Create a neat embed saying that the bot is online, as well as the timestamp, and a green color.
-            embed = Embed(
-                title="Bot Online!",
-                description=bot_mention + " is now online!",
-                timestamp=datetime.datetime.now(datetime.timezone.utc),
-                color=0x00ff00
-            )
-
-            embed.set_thumbnail(url="https://cdn.discordapp.com/avatars/815078851780542484/a10e59ac12b66984453e299e8cb89a8a.png?size=256")
-            embed.add_field(name="Username", value=bot.user.name, inline=True)
-            embed.add_field(name="Owner", value=owner_mention, inline=True)
-            embed.add_field(name="ID", value=bot.user.id, inline=False)
-            # embed.add_field(name="Name", value="Value", inline=True)
-
-            embed.set_footer(
-                text="Online Notifier",
-                icon_url='https://cdn.discordapp.com/avatars/815078851780542484/a10e59ac12b66984453e299e8cb89a8a.png?size=256'
-            )
-            for channel in channels:
-                await channel.send(embed=embed)  # Send the online message to the botcreators channel and the update channel.
-
-        else:
-            print(print_info + "The bot has successfully " + bcolors.OKGREEN + "reconnected" + bcolors.ENDC + "!")
-
-    # A test for the scheduling functionality, the scheduler will do this at the specified time.
-    # async def test_schedule(self):
-    # channel = self.get_channel(819727424659914762)
-    # await channel.send('This is a scheduled message, the bot is working fine!')
 
 
 bot = Bot()
