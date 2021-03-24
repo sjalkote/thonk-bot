@@ -16,6 +16,7 @@ help_utility = """
                 `?!remind` - Set a reminder for anything, for a duration of 5 minutes to 7 days! Cooldown of 1 use every 5 minutes.\n
                 `?!mcserver` - Check the status of any Minecraft server by simply specifying the IP after the command! Cooldown of one use every 10 seconds.\n
                 `?!ping` - Get the bot's latency.\n
+                `?!github` - Send a link to my GitHub page.\n
 """
 help_fun = """
             `?!bonk` - 'Hit' another member for a specified reason with random objects!\n
