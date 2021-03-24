@@ -9,7 +9,6 @@ from discord.ext.commands.cooldowns import *
 from discord.ext import commands
 from discord.ext import tasks
 from lib.bot.__init__ import bcolors
-from lib.bot.__init__ import print_info, print_spec, print_cog, print_scheduler, print_warn
 
 # -------------------------------------------------------------------------------------------------------------------------------
 help_utility = """
@@ -175,7 +174,7 @@ class Utility(Cog):
         # Pull the ip/text they sent (auto seperated from command).
         server_ip = argument
         await ctx.message.add_reaction("<a:thonkload:820298504634105866>")
-        message = await ctx.send("<a:thonkload:820298504634105866> One moment, retrieving server information...")
+        await ctx.send("<a:thonkload:820298504634105866> One moment, retrieving server information...")
 
         response = urllib.request.urlopen(f"https://api.mcsrvstat.us/2/{server_ip}")
         data = json.load(response)
@@ -217,7 +216,7 @@ class Utility(Cog):
             self.bot.cogs_ready.ready_up("utility")
 
             # We can comment this out later if needed.
-            print(print_cog + print_spec + "Utility " + bcolors.ENDC + "cog started!")
+            print(bcolors.print_cog + bcolors.print_spec + "Utility " + bcolors.ENDC + "cog started!")
 
 
 def setup(bot):  # Define the cog
