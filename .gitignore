@@ -3,6 +3,7 @@
 /test.py
 *.db
 *.db journal
+.idea
 
 
 # Byte-compiled / optimized / DLL files
