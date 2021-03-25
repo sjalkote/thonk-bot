@@ -10,7 +10,7 @@ from discord.ext.commands import *
 from discord.ext import commands
 from discord.ext import tasks
 from lib.bot.__init__ import bcolors
-from lib.bot.__init__ import print_info, print_spec, print_cog, print_scheduler, print_warn
+
 # -------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -65,7 +65,7 @@ class Fun(Cog):
     async def eightball(self, ctx):
         color = int("{:06x}".format(random.randint(0, 0xFFFFFF)), 16)  # RANDOM EMBED COLOR! Makes the embed color random each time!
 
-        print("{} issued .8ball 🎱".format(ctx.author))  # TODO: Implement in all commands and prettify
+        print(f"{ctx.author} issued .8ball 🎱")  # TODO: Implement in all commands and prettify
 
         choices = [
             "heck no",
@@ -138,9 +138,7 @@ class Fun(Cog):
     async def on_ready(self):
         if not self.bot.ready:
             self.bot.cogs_ready.ready_up("fun")
-
-            # We can comment this out later if needed.
-            print(print_cog + print_spec + "Fun " + bcolors.ENDC + "cog started!")
+            # print(bcolors.print_cog + bcolors.print_spec + "Fun " + bcolors.ENDC + "cog started!")
 
 
 def setup(bot):  # Define the cog

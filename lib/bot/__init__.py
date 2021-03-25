@@ -9,9 +9,9 @@ from discord.ext.commands import *
 from ..db import db
 
 PREFIX = "?!"
-OWNER_ID = '755093458586173531'
+OWNER_ID = 755093458586173531
 
-COGS = ["utility", "fun"]  # Update this when you add more cogs.
+COGS = ["utility", "fun", "owner"]  # Update this when you add more cogs.
 
 
 # Here we make a class to add colorful words to the terminal using ANSI Escape Sequences.
@@ -26,13 +26,13 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
     ITALIC = '\033[3m'
-
-
-print_info = bcolors.OKCYAN + bcolors.BOLD + "[INFO]: " + bcolors.ENDC
-print_warn = bcolors.FAIL + bcolors.BOLD + "[WARN]: " + bcolors.ENDC
-print_scheduler = bcolors.OKCYAN + bcolors.BOLD + "[SCHEDULER]: " + bcolors.ENDC
-print_cog = bcolors.OKGREEN + bcolors.BOLD + "[COG]: " + bcolors.ENDC
-print_spec = bcolors.OKBLUE + bcolors.ITALIC
+    # Presets for use in terminal:
+    print_info = OKCYAN + BOLD + "[INFO]: " + ENDC
+    print_warn = FAIL + BOLD + "[WARN]: " + ENDC
+    print_scheduler = OKCYAN + BOLD + "[SCHEDULER]: " + ENDC
+    print_cog = OKGREEN + BOLD + "[COG]: " + ENDC
+    print_spec = OKBLUE + ITALIC
+    print_success = OKGREEN + BOLD
 
 
 # A conversion command for seconds into hours:minutes:seconds.
@@ -52,7 +52,7 @@ class Ready:
 
     def ready_up(self, cog):
         setattr(self, cog, True)
-        print(print_cog + print_spec + f"{cog}" + bcolors.ENDC + " cog ready")
+        print(bcolors.print_cog + bcolors.print_spec + f"{cog}" + bcolors.ENDC + " cog ready")
 
     def all_ready(self):
         return all([getattr(self, cog) for cog in COGS])
@@ -79,38 +79,35 @@ class Bot(Bot):
             self.load_extension(f"lib.cogs.{cog}")  # Load the cog from lib.cogs, CHANGE IF DIRECTORY STRUCTURE CHANGES.
             cog_amount += 1  # Raise the counter by one (the first cog will say 1 cog loaded instead of 0).
             # <cogname> loaded! (1)
-            print(print_cog + print_spec + f"{cog}" + bcolors.ENDC + " loaded! (" + bcolors.HEADER + f"{cog_amount}" + bcolors.ENDC + ")")
-        print(print_cog + "All cogs have been loaded! We have a total of " + bcolors.HEADER + f"{cog_amount}" + bcolors.ENDC + " cogs.")
+            print(bcolors.print_cog + bcolors.print_spec + f"{cog}" + bcolors.ENDC + " loaded! (" + bcolors.HEADER + f"{cog_amount}" + bcolors.ENDC + ")")
+        print(bcolors.print_cog + "All cogs have been loaded! We have a total of " + bcolors.HEADER + f"{cog_amount}" + bcolors.ENDC + " cogs.")
 
     # Stuff to setup when we first run the bot.
     def run(self, version):
 
-        print(print_info + "Running " + print_spec + "setup..." + bcolors.ENDC)
+        print(bcolors.print_info + "Running " + bcolors.print_spec + "setup..." + bcolors.ENDC)
         self.VERSION = version
         self.setup()
 
-        print(print_info + bcolors.OKGREEN + bcolors.BOLD + "Setup Complete!" + bcolors.ENDC)
-        print(print_info + "Attempting " + print_spec + "login..." + bcolors.ENDC)
+        print(bcolors.print_info + bcolors.OKGREEN + bcolors.BOLD + "Setup Complete!" + bcolors.ENDC)
+        print(bcolors.print_info + "Attempting " + bcolors.print_spec + "login..." + bcolors.ENDC)
         super().run(self.TOKEN, reconnect=True)
 
     # When the bot connects.
     async def on_connect(self):
         # Say that we logged in successfully, and give the username + userid that the bot has logged in as.
-        print(f"{print_info}{bcolors.OKGREEN}{bcolors.BOLD}Successful Connection! {bcolors.ENDC}")
-        print(
-            print_info + "Logged in as: " + bcolors.OKCYAN + bcolors.HEADER + bcolors.ITALIC + str(bot.user) + bcolors.ENDC)
-        print(
-            print_info + "Bot ID: " + bcolors.OKCYAN + bcolors.HEADER + bcolors.ITALIC + "{bot_user_id}".format(
-                bot_user_id=bot.user.id) + bcolors.ENDC)
+        print(f"{bcolors.print_info}{bcolors.print_success}Successful Connection! {bcolors.ENDC}")
+        print(bcolors.print_info + "Logged in as: " + bcolors.OKCYAN + bcolors.HEADER + bcolors.ITALIC + str(bot.user) + bcolors.ENDC)
+        print(bcolors.print_info + "Bot ID: " + bcolors.OKCYAN + bcolors.HEADER + bcolors.ITALIC + f"{bot.user.id}" + bcolors.ENDC)
 
     # When the bot disconnects/stops.
     async def on_disconnect(self):
-        print(print_warn + bcolors.WARNING + "The bot has " + bcolors.BOLD + "disconnected!" + bcolors.ENDC)
+        print(bcolors.print_warn + bcolors.WARNING + "The bot has " + bcolors.BOLD + "disconnected!" + bcolors.ENDC)
 
     # ERROR HANDLING ------------------------------------------------------------------------------------------------------------------
     async def on_error(self, err, *args, **kwargs):
         if err == "on_command_error":
-            await args[0].send("Something went wrong!")
+            await args[0].send("Something went wrong! ```\n" + str(args) + "\n```")
         raise
 
     async def on_command_error(self, ctx, exc):
@@ -148,6 +145,12 @@ class Bot(Bot):
             await sleep(5)
             await message.delete()
 
+        elif isinstance(exc, NotOwner):
+            await ctx.message.add_reaction("🔐")
+            message = await ctx.send("That command is for my bot owner! Check the `?!help` command.")
+            await sleep(5)
+            await message.delete()
+
         # If no error handling is available for it, send the error.
         else:
             try:
@@ -178,8 +181,8 @@ class Bot(Bot):
             # print(print_scheduler + "Job Added: " + print_spec + "test_schedule" + bcolors.ENDC)
             self.scheduler.start()
 
-            print(print_info + bcolors.OKBLUE + bcolors.ITALIC + 'Scheduler' + bcolors.ENDC + ' started!')
-            print(print_info + bcolors.OKGREEN + bcolors.BOLD + 'Bot is ready!' + bcolors.ENDC)
+            print(bcolors.print_scheduler + bcolors.print_spec + 'Scheduler' + bcolors.ENDC + ' started!')
+            print(bcolors.print_info + bcolors.OKGREEN + bcolors.BOLD + 'Bot is ready!' + bcolors.ENDC)
             # print('-----------------------------------------------------------------------------------------------------------------')
 
 

@@ -9,7 +9,6 @@ from discord.ext.commands.cooldowns import *
 from discord.ext import commands
 from discord.ext import tasks
 from lib.bot.__init__ import bcolors
-from lib.bot.__init__ import print_info, print_spec, print_cog, print_scheduler, print_warn
 
 # -------------------------------------------------------------------------------------------------------------------------------
 help_utility = """
@@ -26,16 +25,26 @@ help_fun = """
             
 """
 
+help_owner = """
+            `?!restart` - Restart the entire bot.\n
+            `?!shutdown` - Turns off the bot and exists the script.\n
+
+"""
+
 
 class Utility(Cog):
     def __init__(self, bot):
         self.bot = bot
 
     # Define the help pages. ADD MORE WHEN NEEDED.
-    page1 = discord.Embed(title="Utility Commands", description=help_utility, colour=discord.Colour.orange())
-    page2 = discord.Embed(title="Fun Commands", description=help_fun, colour=discord.Colour.green())
-    # page3 = discord.Embed(title="TEST Bot Help 3", description="Page 3", colour=discord.Colour.orange())
-    bot.help_pages = [page1, page2]  # Make sure to add new pages here as well
+    page1 = discord.Embed(title="Utility Commands", description=help_utility, color=discord.Color.orange(), url="https://thonkbot.zetasj.com#utility")
+    page1.set_footer(text="You can check out my documentation at https://thonkbot.zetasj.com#utility !")
+    page2 = discord.Embed(title="Fun Commands", description=help_fun, color=discord.Color.green(), url="https://thonkbot.zetasj.com#fun")
+    page2.set_footer(text="You can check out my documentation at https://thonkbot.zetasj.com#fun !")
+    page3 = discord.Embed(title="Owner Commands", description=help_owner, color=discord.Color.blue(), url="https://thonkbot.zetasj.com#owner")
+    page3.set_footer(text="You can find my documentation at https://thonkbot.zetasj.com#owner")
+    # page = discord.Embed(title="TEST Bot Help", description="Page", colour=discord.Colour.orange())
+    bot.help_pages = [page1, page2, page3]  # Make sure to add new pages here as well
 
     # HELP COMMAND? ---------------------------------------------------------------------------------------------------------------------------
     # TODO: Find a more optimized solution if possible
@@ -79,7 +88,7 @@ class Utility(Cog):
 
     # -------------------------------------------------------------------------------------------------------------------------------------
     # The GitHub Command, gives a link to the github.
-    @command(name="github")
+    @commands.command(name="github")
     async def github(self, ctx):
         embed = discord.Embed(title="TechnoShip123", url="http://github.com/TechnoShip123",
                               description="The link for my github page", color=0x00ffbf, timestamp=datetime.utcnow())
@@ -95,7 +104,7 @@ class Utility(Cog):
 
     # -------------------------------------------------------------------------------------------------------------------------------------
     # LATENCY COMMAND
-    @commands.command(name="ping", help="Gets the bot latency", case_insensitive=True)
+    @commands.command(name="ping", aliases=["latency"], help="Gets the bot latency", case_insensitive=True)
     async def ping(self, ctx):
         await ctx.send(f'🏓 Pong! Latency is **{round(self.bot.latency * 1000)}ms**.')
 
@@ -175,7 +184,7 @@ class Utility(Cog):
         # Pull the ip/text they sent (auto seperated from command).
         server_ip = argument
         await ctx.message.add_reaction("<a:thonkload:820298504634105866>")
-        message = await ctx.send("<a:thonkload:820298504634105866> One moment, retrieving server information...")
+        await ctx.send("<a:thonkload:820298504634105866> One moment, retrieving server information...")
 
         response = urllib.request.urlopen(f"https://api.mcsrvstat.us/2/{server_ip}")
         data = json.load(response)
@@ -215,9 +224,7 @@ class Utility(Cog):
     async def on_ready(self):
         if not self.bot.ready:
             self.bot.cogs_ready.ready_up("utility")
-
-            # We can comment this out later if needed.
-            print(print_cog + print_spec + "Utility " + bcolors.ENDC + "cog started!")
+            # print(bcolors.print_cog + bcolors.print_spec + "Utility " + bcolors.ENDC + "cog started!")
 
 
 def setup(bot):  # Define the cog
