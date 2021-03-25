@@ -32,7 +32,7 @@ class OwnerCog(commands.Cog):
         try:
             await bot.close()
         finally:
-            os.system("python3 launcher.py"
+            os.system("python3 launcher.py")
 
     # End of Cog -------------------------------------------------------------------------------------------------------------------------------
     @Cog.listener()
