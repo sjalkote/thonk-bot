@@ -9,9 +9,9 @@ from discord.ext.commands import *
 from ..db import db
 
 PREFIX = "?!"
-OWNER_ID = '755093458586173531'
+OWNER_ID = 755093458586173531
 
-COGS = ["utility", "fun"]  # Update this when you add more cogs.
+COGS = ["utility", "fun", "owner"]  # Update this when you add more cogs.
 
 
 # Here we make a class to add colorful words to the terminal using ANSI Escape Sequences.
@@ -107,7 +107,7 @@ class Bot(Bot):
     # ERROR HANDLING ------------------------------------------------------------------------------------------------------------------
     async def on_error(self, err, *args, **kwargs):
         if err == "on_command_error":
-            await args[0].send("Something went wrong!")
+            await args[0].send("Something went wrong! ```\n" + str(args) + "\n```")
         raise
 
     async def on_command_error(self, ctx, exc):
@@ -145,6 +145,12 @@ class Bot(Bot):
             await sleep(5)
             await message.delete()
 
+        elif isinstance(exc, NotOwner):
+            await ctx.message.add_reaction("🔐")
+            message = await ctx.send("That command is for my bot owner! Check the `?!help` command.")
+            await sleep(5)
+            await message.delete()
+
         # If no error handling is available for it, send the error.
         else:
             try:
@@ -175,7 +181,7 @@ class Bot(Bot):
             # print(print_scheduler + "Job Added: " + print_spec + "test_schedule" + bcolors.ENDC)
             self.scheduler.start()
 
-            print(bcolors.print_info + bcolors.OKBLUE + bcolors.ITALIC + 'Scheduler' + bcolors.ENDC + ' started!')
+            print(bcolors.print_scheduler + bcolors.print_spec + 'Scheduler' + bcolors.ENDC + ' started!')
             print(bcolors.print_info + bcolors.OKGREEN + bcolors.BOLD + 'Bot is ready!' + bcolors.ENDC)
             # print('-----------------------------------------------------------------------------------------------------------------')
 

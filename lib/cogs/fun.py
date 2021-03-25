@@ -138,9 +138,7 @@ class Fun(Cog):
     async def on_ready(self):
         if not self.bot.ready:
             self.bot.cogs_ready.ready_up("fun")
-
-            # We can comment this out later if needed.
-            print(bcolors.print_cog + bcolors.print_spec + "Fun " + bcolors.ENDC + "cog started!")
+            # print(bcolors.print_cog + bcolors.print_spec + "Fun " + bcolors.ENDC + "cog started!")
 
 
 def setup(bot):  # Define the cog
