@@ -9,6 +9,8 @@ As of right now, **I do *not* plan on making my bot for public use**, so I will 
 
 If you would like to see more projects from me, make sure to check out my [GitHub page](https://github.com/TechnoShip123)!
 
+The bot's documentation can be found [here](https://thonkbot.zetasj.com).
+
 ### For code use/modification
 You will need to provide a `key.txt` file containing the bot key that you generate from your application in the Discord Developer page. This bot will also contain code for slash-commands so you will need to make sure your bot app has access to them.
 
