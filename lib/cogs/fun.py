@@ -29,7 +29,7 @@ class Fun(Cog):
         if member == "<@!815078851780542484>":  # Check if it's hitting the bot
             await ctx.send(f"{ctx.author.mention} tried to hit me, but I dodged and yeeted them!")
         elif member == ctx.author.mention:  # Check if they're hitting themseleves
-            await ctx.send(f"{ctx.author.mention} themseleves with {random.choice(object_list)} for {reason}.")
+            await ctx.send(f"{ctx.author.mention} themselves with {random.choice(object_list)} for {reason}.")
         else:  # Otherwise continue as normal
             await ctx.send(f"{ctx.author.mention} hit {member} with {random.choice(object_list)} for {reason}.")
 
