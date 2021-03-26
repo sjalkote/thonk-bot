@@ -47,7 +47,6 @@ class Utility(Cog):
     bot.help_pages = [page1, page2, page3]  # Make sure to add new pages here as well
 
     # HELP COMMAND? ---------------------------------------------------------------------------------------------------------------------------
-    # TODO: Find a more optimized solution if possible
     @command(name="help")
     async def help(self, ctx):
         buttons = [u"\u23EA", u"\u2B05", u"\u27A1", u"\u23E9"]  # skip to start, left, right, skip to end
@@ -114,46 +113,48 @@ class Utility(Cog):
     @commands.cooldown(1, 150, commands.BucketType.user)  # Cooldown of 2 uses every 150 seconds per user.
     @command(name="remind", aliases=["reminder, remindme"], help="This command allows you to set a remind from 5 minutes to 7 days! Specify your value like 5m for 5 minutes.")
     async def remind(self, ctx, time, *, reminder):
-        # print(time)
-        # print(reminder)
+
         user = "<@!" + str(ctx.author.id) + ">"
         embed = discord.Embed(color=0x55a7f7, timestamp=datetime.utcnow())
         embed.set_footer(text="Requested by: " + ctx.author.name, icon_url=f"{ctx.message.author.avatar_url}")
         seconds = 0
+        # If no reminder is specified:
         if reminder is None:
             embed.add_field(name='Warning', value="Please specify what do you want me to remind you about. (after the time interval)")  # Error message
-            self.remind.reset_cooldown()
-        if time != int:
-            embed.add_field(name='Warning', value="Please specify the time interval as a number, followed by the format. (`5m` for 5 minutes)")  # Error message
             self.remind.reset_cooldown(ctx)
-        if time.lower().endswith("d"):
-            seconds += int(time[:-1]) * 60 * 60 * 24
-            counter = f"{seconds // 60 // 60 // 24} day(s)"
-        if time.lower().endswith("h"):
-            seconds += int(time[:-1]) * 60 * 60
-            counter = f"{seconds // 60 // 60} hour(s)"
-        elif time.lower().endswith("m"):
-            seconds += int(time[:-1]) * 60
-            counter = f"{seconds // 60} minute(s)"
-        elif time.lower().endswith("s"):
-            seconds += int(time[:-1])
-            counter = f"{seconds} second(s)"
-        if seconds == 0:
-            embed.add_field(name='Invalid Duration!',
-                            value='Please specify a proper duration, `?!remind <time> <name>`. For example, `?!remind 5m Coding` for a reminder in 5 minutes.')
+        elif time[:-1].isnumeric() is False:
             self.remind.reset_cooldown(ctx)
-        elif seconds < 300:
-            embed.add_field(name='Duration Too Small!',
-                            value='You have specified a too short duration!\nThe minimum duration is 5 minutes.')
-            self.remind.reset_cooldown(ctx)
-        elif seconds > 604800:
-            embed.add_field(name='Duration Too Large!', value='You have specified too long of a duration!\nThe maximum duration is 7 days.')
-            self.remind.reset_cooldown(ctx)
+            embed.add_field(name='Warning', value="Please specify a valid time! For example, `5m` for 5 minutes, or `2d for 2 days`!")
+
         else:
-            await ctx.reply(f"Alright, I will remind you about {reminder} in {counter}.")
-            await asyncio.sleep(seconds)
-            await ctx.send(f"Hey {user}, you asked me to remind you about {reminder} {counter} ago.")
-            return
+            if time.lower().endswith("d"):
+                seconds += int(time[:-1]) * 60 * 60 * 24
+                counter = f"{seconds // 60 // 60 // 24} day(s)"
+            if time.lower().endswith("h"):
+                seconds += int(time[:-1]) * 60 * 60
+                counter = f"{seconds // 60 // 60} hour(s)"
+            elif time.lower().endswith("m"):
+                seconds += int(time[:-1]) * 60
+                counter = f"{seconds // 60} minute(s)"
+            elif time.lower().endswith("s"):
+                seconds += int(time[:-1])
+                counter = f"{seconds} second(s)"
+            if seconds == 0:
+                embed.add_field(name='Invalid Duration!',
+                                value='Please specify a proper duration, `?!remind <time> <name>`. For example, `?!remind 5m Coding` for a reminder in 5 minutes.')
+                self.remind.reset_cooldown(ctx)
+            elif seconds < 300:
+                embed.add_field(name='Duration Too Small!',
+                                value='You have specified a too short duration!\nThe minimum duration is 5 minutes.')
+                self.remind.reset_cooldown(ctx)
+            elif seconds > 604800:
+                embed.add_field(name='Duration Too Large!', value='You have specified too long of a duration!\nThe maximum duration is 7 days.')
+                self.remind.reset_cooldown(ctx)
+            else:
+                await ctx.reply(f"Alright, I will remind you about {reminder} in {counter}.")
+                await asyncio.sleep(seconds)
+                await ctx.send(f"Hey {user}, you asked me to remind you about {reminder} {counter} ago.")
+                return
         await ctx.send(embed=embed)  # Send the embed with the information.
 
     # Remind Command ERROR HANDLER (Invalid Input)
@@ -161,6 +162,9 @@ class Utility(Cog):
     async def remind_error(self, ctx, exc):
         if isinstance(exc, MissingRequiredArgument):
             self.remind.reset_cooldown(ctx)
+        elif isinstance(exc, ValueError):
+            self.remind.reset_cooldown(ctx)
+            await ctx.send("That isn't a valid time duration")
             # await ctx.send("A required argument was missing")
 
     # --------------------------------------------------------------------------------------------------------------------------------------------------

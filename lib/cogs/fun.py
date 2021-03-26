@@ -63,8 +63,7 @@ class Fun(Cog):
     @commands.command(name="eightball", aliases=["8ball"], help="Just like a real 8 ball!")
     async def eightball(self, ctx):
         color = int("{:06x}".format(random.randint(0, 0xFFFFFF)), 16)  # RANDOM EMBED COLOR! Makes the embed color random each time!
-
-        print(f"{ctx.author} issued .8ball 🎱")  # TODO: Implement in all commands and prettify
+        # print(f"{bcolors.print_com_used}{ctx.author} used ?!8ball")  # TODO: Implement in all commands and prettify
 
         choices = [
             "heck no",
@@ -87,8 +86,8 @@ class Fun(Cog):
             "Very doubtful",
             "without a doubt",
             "yep",
-            "yes - definitely, yep, i think so, maybe, no",
-            "you may rely on it i guess",
+            "yes - definitely, yep, I think so, maybe, no",
+            "you may rely on it I guess",
             "Yes.................",
             "No",
             "Take a wild guess...",
@@ -99,17 +98,17 @@ class Fun(Cog):
             "Might be possible",
             "You'll be the judge",
             "no... (╯°□°）╯︵ ┻━┻",
-            "pink is the impostor! wait... what do you mean this is an 8 ball command??",
-            "**E**",
+            "red is the impostor! wait... what do you mean this is an 8 ball command??",
+            "**E.**",
             "IDK not my problem",
             r"¯\_(ツ)_/¯"
         ]
 
-        aaaaa = random.choice(choices)
+        ball_choice = random.choice(choices)
 
         embed = discord.Embed(
             title="The Magic 8-Ball",
-            description=f"**🎱8-ball:** {aaaaa}",
+            description=f"**🎱8-ball:** {ball_choice}",
             color=color,
             timestamp=datetime.utcnow()
         )
