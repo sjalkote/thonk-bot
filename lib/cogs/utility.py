@@ -47,7 +47,6 @@ class Utility(Cog):
     bot.help_pages = [page1, page2, page3]  # Make sure to add new pages here as well
 
     # HELP COMMAND? ---------------------------------------------------------------------------------------------------------------------------
-    # TODO: Find a more optimized solution if possible
     @command(name="help")
     async def help(self, ctx):
         buttons = [u"\u23EA", u"\u2B05", u"\u27A1", u"\u23E9"]  # skip to start, left, right, skip to end

@@ -1,6 +1,3 @@
-# THIS COMMAND IS NOT GOING TO BE AVAILABLE YET
-# Until I make cogs in the main bot, this command will not be usable, I'm just keeping it here for when the time comes.
-
 from discord.ext import commands
 import discord.ext.tasks
 from datetime import *

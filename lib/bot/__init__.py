@@ -33,6 +33,8 @@ class bcolors:
     print_cog = OKGREEN + BOLD + "[COG]: " + ENDC
     print_spec = OKBLUE + ITALIC
     print_success = OKGREEN + BOLD
+    print_com_used = OKBLUE + BOLD + "[Command]: " + ENDC
+    print_evaluate = HEADER + BOLD + "[EVAL]: " + ENDC
 
 
 # A conversion command for seconds into hours:minutes:seconds.
@@ -184,6 +186,25 @@ class Bot(Bot):
             print(bcolors.print_scheduler + bcolors.print_spec + 'Scheduler' + bcolors.ENDC + ' started!')
             print(bcolors.print_info + bcolors.OKGREEN + bcolors.BOLD + 'Bot is ready!' + bcolors.ENDC)
             # print('-----------------------------------------------------------------------------------------------------------------')
+
+    async def on_message(self, message):
+        # If the message is a command:
+        if message.author != self.user:
+            if message.content.lower().startswith(PREFIX):
+                umessage = message.content.lower().split(" ", 1)
+                print(f"{bcolors.print_com_used}{message.author} used " + umessage[0])
+                await bot.process_commands(message)
+                pass
+
+        # If the message is not a command:
+        else:
+            # If the bot gets mentioned or pinged in any way.
+            if bot.user in message.mentions:
+                await message.channel.send("Imagine pinging lol use `?!help` instead!")
+
+            # If someone says hi.
+            if message.content.lower() == "hello" or message.content.lower() == "hi":
+                await message.add_reaction("👋")
 
 
 bot = Bot()
