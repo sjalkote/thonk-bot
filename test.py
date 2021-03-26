@@ -25,7 +25,7 @@ async def remind(ctx, time, *, reminder):
         embed.add_field(name='Warning', value='Please specify what do you want me to remind you about.')  # Error message
     if time.lower().endswith("d"):
         seconds += int(time[:-1]) * 60 * 60 * 24
-        counter = f"{seconds // 60 // 60 // 24} day(s)"  # TODO: If the result is 1 then send as day otherwise as days.
+        counter = f"{seconds // 60 // 60 // 24} day(s)"
     if time.lower().endswith("h"):
         seconds += int(time[:-1]) * 60 * 60
         counter = f"{seconds // 60 // 60} hour(s)"

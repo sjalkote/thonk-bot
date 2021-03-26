@@ -85,7 +85,7 @@ async def on_member_join(member):
 async def add(ctx, left: int, right: int):
     await ctx.send(left + right)
 
-    # TODO: Custom Error message for some commands?
+
     # This one could be: `await ctx.send("Invalid input. Try: `?!add 5 10` to add 5 + 10.")` (don't forget return)
 
 
@@ -144,7 +144,7 @@ async def getZenquote(message):
 @bot.command(name='echo', help='Says back what you say!')
 async def echo(ctx, *umessage):
     umessage = ''.join(umessage)
-    await ctx.send(umessage)  # TODO: Make it change `you` to `me` and stuff like that
+    await ctx.send(umessage)
 
 
 # COMMAND - Self promo, this is a Github command, gives a link to my GitHub profile (TechnoShip123)
@@ -175,7 +175,7 @@ async def on_command_error(ctx, error):
 
     # If the command does not exist
     if isinstance(error, commands.CommandNotFound):
-        await ctx.send('This command does not exist!')  # TODO: Add suggestion command and tell about it here.
+        await ctx.send('This command does not exist!')
 
     # If the BOT is missing permissions to run the command.
     if isinstance(error, commands.BotMissingPermissions):
@@ -197,7 +197,6 @@ async def on_command_error(ctx, error):
     if isinstance(exc, commands.CommandOnCooldown):
         await ctx.message.add_reaction('🕐')
         await ctx.send("This command is on cooldown, please retry in {}s.".format(math.ceil(exc.retry_after)))
-        # TODO: Make it delete the message after a few seconds here.
         return
 
     # If the user needs certain permissions to run the command.
