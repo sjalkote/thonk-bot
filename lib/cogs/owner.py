@@ -1,6 +1,8 @@
 import discord
 import os
 import asyncio
+import psutil
+import sys
 from datetime import *
 from discord.ext.commands import *
 from discord.ext.commands.cooldowns import *
@@ -29,6 +31,18 @@ class OwnerCog(commands.Cog):
             await bot.close()
         finally:
             os.system("python3 launcher.py")
+
+    # STATS COMMAND -----------------------------------------------------------------------------
+    @command(name="botstats")
+    @is_owner()
+    async def botstats(self, ctx):
+        embed = discord.Embed(title="Server Status", type="rich")
+        vmem = psutil.virtual_memory()
+        embed.add_field(name="RAM Usage", value=f"{round(vmem.used / 1000000000, 2)}GB out of {round(vmem.total / 1000000000, 2)}GB")
+        embed.add_field(name="CPU Usage", value=f"{psutil.cpu_percent()}%")
+        embed.add_field(name="Python info", value=sys.version, inline=False)
+        embed.add_field(name="Bot Info", value=f"Me: <@!{self.bot.user.id}>\nOwner: <@!{self.bot.owner_id}>")
+        await ctx.send(embed=embed)
 
     # End of Cog -------------------------------------------------------------------------------------------------------------------------------
     @Cog.listener()

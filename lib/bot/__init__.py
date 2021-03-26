@@ -2,6 +2,7 @@ from asyncio import sleep
 import datetime
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
+import discord
 from discord import *
 from discord.errors import *
 from discord.ext.commands import *
@@ -184,6 +185,10 @@ class Bot(Bot):
             self.scheduler.start()
 
             print(bcolors.print_scheduler + bcolors.print_spec + 'Scheduler' + bcolors.ENDC + ' started!')
+            status = f"you for ?!"  # The bot status
+            await bot.change_presence(activity=discord.Activity(name=status, type=discord.ActivityType.watching))  # Set the bot presence/status
+            print(f"{bcolors.print_info}Bot {bcolors.print_spec}status set!{bcolors.ENDC}")
+
             print(bcolors.print_info + bcolors.OKGREEN + bcolors.BOLD + 'Bot is ready!' + bcolors.ENDC)
             # print('-----------------------------------------------------------------------------------------------------------------')
 
