@@ -121,10 +121,14 @@ class Utility(Cog):
         embed.set_footer(text="Requested by: " + ctx.author.name, icon_url=f"{ctx.message.author.avatar_url}")
         seconds = 0
         if reminder is None:
-            embed.add_field(name='Warning', value='Please specify what do you want me to remind you about.')  # Error message
+            embed.add_field(name='Warning', value="Please specify what do you want me to remind you about. (after the time interval)")  # Error message
+            self.remind.reset_cooldown()
+        if time != int:
+            embed.add_field(name='Warning', value="Please specify the time interval as a number, followed by the format. (`5m` for 5 minutes)")  # Error message
+            self.remind.reset_cooldown(ctx)
         if time.lower().endswith("d"):
             seconds += int(time[:-1]) * 60 * 60 * 24
-            counter = f"{seconds // 60 // 60 // 24} day(s)"  # TODO: If the result is 1 then send as day otherwise as days.
+            counter = f"{seconds // 60 // 60 // 24} day(s)"
         if time.lower().endswith("h"):
             seconds += int(time[:-1]) * 60 * 60
             counter = f"{seconds // 60 // 60} hour(s)"
@@ -151,6 +155,13 @@ class Utility(Cog):
             await ctx.send(f"Hey {user}, you asked me to remind you about {reminder} {counter} ago.")
             return
         await ctx.send(embed=embed)  # Send the embed with the information.
+
+    # Remind Command ERROR HANDLER (Invalid Input)
+    @remind.error
+    async def remind_error(self, ctx, exc):
+        if isinstance(exc, MissingRequiredArgument):
+            self.remind.reset_cooldown(ctx)
+            # await ctx.send("A required argument was missing")
 
     # --------------------------------------------------------------------------------------------------------------------------------------------------
     # THE SUGGESTION COMMAND. Write down a suggestion and it'll ping in an embed.

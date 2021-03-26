@@ -131,7 +131,7 @@ class Bot(Bot):
             else:
                 cooldown_remaining = str(round(cooldown_remaining)) + " seconds"
             await ctx.message.add_reaction('⏱')  # Also try hourglass (⌛). This adds a reaction to the user's message.
-            message = await ctx.reply(f"Sorry! That command is currently on a cooldown! Please try again after {cooldown_remaining}!")  # Reply with the time remaining for the cooldown.
+            message = await ctx.reply(f"Sorry! That command is currently on a cooldown! Please try again after {cooldown_remaining}!")
             await sleep(5)
             await message.delete()
 

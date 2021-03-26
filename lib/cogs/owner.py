@@ -18,16 +18,12 @@ class OwnerCog(commands.Cog):
     async def shutdown(self, ctx):
         await ctx.send("Alright, shutting down.")
         print(f"{bcolors.print_info}{bcolors.print_success}Stopping bot.{bcolors.ENDC}")
-        try:
-            await self.bot.close()
-        finally:
-            print(f"{bcolors.print_info}{bcolors.print_success}Bot closed, exiting script.{bcolors.ENDC}")
-            exit(0)
+        exit(0)  # Not a very clean way to stop, but there is a Windows bug with the module where the bot.stop and logout don't work.
 
 # RESTART COMMAND ---------------------------------------------------------------------------
     @command(name="restart")
     @is_owner()
-    async def owner(self, ctx):
+    async def restart(self, ctx):
         await ctx.reply("Alright, I'm restarting.")
         try:
             await bot.close()
