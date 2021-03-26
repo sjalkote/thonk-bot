@@ -1,3 +1,6 @@
+sudo systemctl start docker
+sleep 1
+
 docker stop thonk-bot
 sleep 2
 
