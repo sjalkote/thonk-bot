@@ -189,12 +189,11 @@ class Bot(Bot):
 
     async def on_message(self, message):
         # If the message is a command:
-        if message.author != self.user:
-            if message.content.lower().startswith(PREFIX):
-                umessage = message.content.lower().split(" ", 1)
-                print(f"{bcolors.print_com_used}{message.author} used " + umessage[0])
-                await bot.process_commands(message)
-                pass
+        if message.content.lower().startswith(PREFIX):
+            umessage = message.content.lower().split(" ", 1)
+            print(f"{bcolors.print_com_used}{message.author} used " + umessage[0])
+            await bot.process_commands(message)
+            pass
 
         # If the message is not a command:
         else:

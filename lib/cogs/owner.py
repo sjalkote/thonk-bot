@@ -5,6 +5,7 @@ from datetime import *
 from discord.ext.commands import *
 from discord.ext.commands.cooldowns import *
 from discord.ext import *
+from lib.bot.__init__ import bcolors
 
 
 class OwnerCog(commands.Cog):
