@@ -111,7 +111,7 @@ class Utility(Cog):
     # -------------------------------------------------------------------------------------------------------------------------------------
     # THE REMINDER COMMAND. Specify when you want to be reminded, and the bot will ping you on that time.
     # TODO: Make the cooldown ONLY IF THE COMMAND FAILS, such as if someone put a time that was too short or in an invalid format.
-    @commands.cooldown(2, 150, commands.BucketType.user)  # Cooldown of 2 uses every 150 seconds per user.
+    @commands.cooldown(1, 150, commands.BucketType.user)  # Cooldown of 2 uses every 150 seconds per user.
     @command(name="remind", aliases=["reminder, remindme"], help="This command allows you to set a remind from 5 minutes to 7 days! Specify your value like 5m for 5 minutes.")
     async def remind(self, ctx, time, *, reminder):
         # print(time)
@@ -137,11 +137,14 @@ class Utility(Cog):
         if seconds == 0:
             embed.add_field(name='Invalid Duration!',
                             value='Please specify a proper duration, `?!remind <time> <name>`. For example, `?!remind 5m Coding` for a reminder in 5 minutes.')
+            self.remind.reset_cooldown(ctx)
         elif seconds < 300:
             embed.add_field(name='Duration Too Small!',
                             value='You have specified a too short duration!\nThe minimum duration is 5 minutes.')
+            self.remind.reset_cooldown(ctx)
         elif seconds > 604800:
             embed.add_field(name='Duration Too Large!', value='You have specified too long of a duration!\nThe maximum duration is 7 days.')
+            self.remind.reset_cooldown(ctx)
         else:
             await ctx.reply(f"Alright, I will remind you about {reminder} in {counter}.")
             await asyncio.sleep(seconds)
