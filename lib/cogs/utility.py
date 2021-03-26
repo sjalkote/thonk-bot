@@ -28,6 +28,7 @@ help_fun = """
 help_owner = """
             `?!restart` - Restart the entire bot.\n
             `?!shutdown` - Turns off the bot and exists the script.\n
+            `?!botstats` - Get bot and machine information.
 
 """
 
