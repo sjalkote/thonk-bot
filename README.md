@@ -1,4 +1,8 @@
+![Library - Discord.py](https://img.shields.io/badge/Library-Discord.py-informational?style=flat-square&logo=discord&logoColor=white&link=https://github.com/Rapptz/discord.py)
+
 # Thonk Bot
+
+### About
 The source code for a Discord bot built on Python and run on Docker, that I am creating to learn more about the [discord.py](https://discordpy.readthedocs.io/en/latest/) rewrite, ~~as well as an excuse to do something when I'm bored.~~
 
 I'm mainly using the [discord.py](https://pypi.org/project/discord.py/) library, and experimenting with [PyNaCl](https://pypi.org/project/PyNaCl/) for voice support. Hopefully I can structure my code using cogs, makes the project way more neater overall.
