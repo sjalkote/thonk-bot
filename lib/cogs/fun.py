@@ -138,13 +138,26 @@ class Fun(Cog):
         avail_emojis = "<a:thonkhmm:820738912917520424> <a:stevedance:820417132432588812> <a:thonksplode:820738463828934678> " \
                        "<:stevegun:815628826767523840> <:nice:817119421445046293> <a:mcgrassblock:820298284228542484> " \
                        "<a:discordload:801598729240444928>"
+        avail_gifs = "`sus`"
 
+        # If it's listing emojis
         if content == "--emojis":
             embed = discord.Embed(title="Emojis", url="https://thonkbot.zetasj.com", color=0x73ff00)
             embed.add_field(name="Available Emojis: ", value=avail_emojis)
             embed.set_footer(text="Requested by: " + str(ctx.author))
             await ctx.send(embed=embed)
-
+        # If it's a gif:
+        elif content.startswith("--gifs"):
+            # If it's listing the available gifs:
+            if content == "--gifs":
+                embed = discord.Embed(title="Gifs", url="https://thonkbot.zetasj.com", color=0x00bfff)
+                embed.add_field(name="Available Gifs:", value=avail_gifs)
+                embed.set_footer(text="Requested by: " + str(ctx.author))
+                await ctx.send(embed=embed)
+            # If it's the sus gif:
+            elif content == "--gifs sus":
+                await ctx.send("https://tenor.com/view/sus-gif-20302681")
+        # Otherwise, send the message/emojis:
         else:
             # Check for emojis that we support and replace them here.
             newMessage = content.replace(":thonkhmm:", "<a:thonkhmm:820738912917520424>")
