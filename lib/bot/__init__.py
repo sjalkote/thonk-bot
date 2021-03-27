@@ -116,7 +116,7 @@ class Bot(Bot):
     async def on_command_error(self, ctx, exc):
         # If the command does not exist/is not found.
         if isinstance(exc, CommandNotFound):
-            await ctx.message.add_reaction("<:denied:806962608912597002>")
+            await ctx.message.add_reaction("<:questionmark:825353476317642752>")
             message = await ctx.reply("Sorry! That command does not currently exist! You can use `?!help` to view available commands!")
             await sleep(5)
             await message.delete()
