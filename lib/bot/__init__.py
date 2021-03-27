@@ -204,11 +204,14 @@ class Bot(Bot):
         else:
             # If the bot gets mentioned or pinged in any way.
             if bot.user in message.mentions:
-                await message.channel.send("Imagine pinging lol use `?!help` instead!")
+                await message.add_reaction("<:nice:817119421445046293>")
+                await message.channel.send("Yeah that's me, use `?!help` to get a list of commands!")
 
             # If someone says hi.
             if message.content.lower() == "hello" or message.content.lower() == "hi":
                 await message.add_reaction("👋")
+            if message.content.lower() == "bruh":
+                await message.channel.send("<a:thonksplode:820738463828934678> that is very bruh <a:thonksplode:820738463828934678>")
 
 
 bot = Bot()
