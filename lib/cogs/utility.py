@@ -22,7 +22,8 @@ help_fun = """
             `?!8ball` - Give a question and the 8-ball will answer!\n
             `?!soup` - Get your fresh soup here!\n
             `?!quote` - Get a random inspirational quote!\n
-            `?!say` - Say something through the bot, supports various emojis from my server! List them with `--emojis`.
+            `?!say` - Say something through the bot, supports various emojis from my server! List them with `--emojis`. It can also send gifs, use `--gifs ` and then the name
+            of a gif in the available gifs! To list available gifs just use `--gifs`.\n
             
 """
 
