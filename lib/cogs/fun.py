@@ -11,6 +11,7 @@ from discord.ext import commands
 from discord.ext import tasks
 from lib.bot.__init__ import bcolors
 
+
 # -------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -19,7 +20,7 @@ class Fun(Cog):
         self.bot = bot
 
     # Hit/Bonk command, fun way to 'hit' others for the specified reason (defaults to no reason if nothing is provided).
-    @commands.command(name="bonk", help="'Bonk' someone with objects for specified reasons!")
+    @commands.command(name="bonk", aliases=["hit"], help="'Bonk' someone with objects for specified reasons!")
     async def hit(self, ctx, member: str, *, reason: Optional[str] = "no reason"):
         await ctx.message.delete()  # Delete the user message
         object_list = ["a train", "a bat", "some bees", "an acorn", "a truck", "a bulldozer", "a python", "a ban", "a mute", "a kick", "a pie", "GitHub premium", "Octocat",
@@ -29,11 +30,11 @@ class Fun(Cog):
         if member == "<@!815078851780542484>":  # Check if it's hitting the bot
             await ctx.send(f"{ctx.author.mention} tried to hit me, but I dodged and yeeted them!")
         elif member == ctx.author.mention:  # Check if they're hitting themseleves
-            await ctx.send(f"{ctx.author.mention} themselves with {random.choice(object_list)} for {reason}.")
+            await ctx.send(f"{ctx.author.mention} hit themselves with {random.choice(object_list)} for {reason}.")
         else:  # Otherwise continue as normal
             await ctx.send(f"{ctx.author.mention} hit {member} with {random.choice(object_list)} for {reason}.")
 
-# THE SOUP COMMAND ------------------------------------------------------------------------------------------------------------------------------------
+    # THE SOUP COMMAND ------------------------------------------------------------------------------------------------------------------------------------
     @commands.command(name="soup")
     async def soup(self, ctx):
         choices_no = ["Sorry, we dont have any left :/", "no :gun: :cook: "]
@@ -59,8 +60,8 @@ class Fun(Cog):
             await ctx.message.add_reaction('<:soup:808428326120063007>')
             await ctx.send(f'{respond_yes}')
 
-# ------------------------------------------------------------------------------------------------------------------------------------------------------
-    @commands.command(name="eightball", aliases=["8ball"], help="Just like a real 8 ball!")
+    # ------------------------------------------------------------------------------------------------------------------------------------------------------
+    @commands.command(name="8ball", aliases=["eightball"], help="Just like a real 8 ball!")
     async def eightball(self, ctx):
         color = int("{:06x}".format(random.randint(0, 0xFFFFFF)), 16)  # RANDOM EMBED COLOR! Makes the embed color random each time!
         # print(f"{bcolors.print_com_used}{ctx.author} used ?!8ball")  # TODO: Implement in all commands and prettify
@@ -115,9 +116,9 @@ class Fun(Cog):
         embed.set_footer(text="Requested by: " + ctx.author.name)
         await ctx.reply(embed=embed)
 
-# ------------------------------------------------------------------------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------------------------------------------------------------------------
     # QUOTE COMMAND, uses a function that looks in a GIANT collection of quotes from `ZenQuotes.io` and picks a random one to return to the user.
-    @commands.command(name='quote', help="Gives a random inspirational quote from a giant collection provided by ZenQuotes.io")
+    @commands.command(name='quote', aliases=(["zenquotes"]))
     async def quote(self, ctx):
         # Get a quote from the API
         response = requests.get("https://zenquotes.io/api/random")
@@ -131,7 +132,34 @@ class Fun(Cog):
         else:
             await ctx.send(quote)  # Send the quote that we randomly chose from ZenQuotes
 
-# ------------------------------------------------------------------------------------------------------------------------------------------------------
+    # SAY COMMAND ------------------------------------------------------------------------------------------------------------------------------------------
+    @commands.command(name="say", aliases=["nitro", "emoji"])
+    async def say(self, ctx, *, content: str):  # Put the wildcard before content to capture everything after the prefix
+        await ctx.message.delete()
+        avail_emojis = "<a:thonkhmm:820738912917520424> <a:stevedance:820417132432588812> <a:thonksplode:820738463828934678> " \
+                       "<:stevegun:815628826767523840> <:nice:817119421445046293> <a:mcgrassblock:820298284228542484> " \
+                       "<a:discordload:801598729240444928>"
+
+        if content == "--emojis":
+            embed = discord.Embed(title="Emojis", url="https://thonkbot.zetasj.com", color=0x73ff00)
+            embed.add_field(name="Available Emojis: ", value=avail_emojis)
+            embed.set_footer(text="Requested by: " + str(ctx.author))
+            await ctx.send(embed=embed)
+
+        else:
+            # Check for emojis that we support and replace them here.
+            newMessage = content.replace(":thonkhmm:", "<a:thonkhmm:820738912917520424>")
+            newMessage = newMessage.replace(":stevedance:", "<a:stevedance:820417132432588812>")
+            newMessage = newMessage.replace(":thonksplode:", "<a:thonksplode:820738463828934678>")
+            newMessage = newMessage.replace(":stevegun:", "<:stevegun:815628826767523840>")
+            newMessage = newMessage.replace(":thonkgoodbye:", "<:stevegun:815628826767523840>")
+            newMessage = newMessage.replace(":nice:", "<:nice:817119421445046293>")
+            newMessage = newMessage.replace(":mcgrassblock:", "<a:mcgrassblock:820298284228542484>")
+            newMessage = newMessage.replace(":discordload:", "<a:discordload:801598729240444928>")
+
+            await ctx.send(newMessage)
+
+    # ------------------------------------------------------------------------------------------------------------------------------------------------------
     @Cog.listener()
     async def on_ready(self):
         if not self.bot.ready:

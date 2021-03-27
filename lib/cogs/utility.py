@@ -22,6 +22,7 @@ help_fun = """
             `?!8ball` - Give a question and the 8-ball will answer!\n
             `?!soup` - Get your fresh soup here!\n
             `?!quote` - Get a random inspirational quote!\n
+            `?!say` - Say something through the bot, supports various emojis from my server! List them with `--emojis`.
             
 """
 
@@ -91,7 +92,8 @@ class Utility(Cog):
     @commands.command(name="github")
     async def github(self, ctx):
         embed = discord.Embed(title="TechnoShip123", url="http://github.com/TechnoShip123",
-                              description="The link for my github page", color=0x00ffbf, timestamp=datetime.utcnow())
+                              description="The link for my github page. The bot repository can be found here:\n https://github.com/TechnoShip123/thonk-bot",
+                              color=0x00ffbf, timestamp=datetime.utcnow())
 
         embed.set_author(name="TechnoShip123", url="https://avatars.githubusercontent.com/u/75491816?s=460&u=f9d8a3cb1a09ed5cc5e918f04ff0e477bc0fadb9&v=4",
                          icon_url="https://github.com/TechnoShip123/DiscordBot/blob/master/resources/GitHub-Mark-Light-32px.png?raw=true")
