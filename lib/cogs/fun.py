@@ -64,7 +64,6 @@ class Fun(Cog):
     @commands.command(name="8ball", aliases=["eightball"], help="Just like a real 8 ball!")
     async def eightball(self, ctx):
         color = int("{:06x}".format(random.randint(0, 0xFFFFFF)), 16)  # RANDOM EMBED COLOR! Makes the embed color random each time!
-        # print(f"{bcolors.print_com_used}{ctx.author} used ?!8ball")  # TODO: Implement in all commands and prettify
 
         choices = [
             "heck no",
