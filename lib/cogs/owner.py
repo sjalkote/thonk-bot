@@ -44,6 +44,21 @@ class OwnerCog(commands.Cog):
         embed.add_field(name="Bot Info", value=f"Me: <@!{self.bot.user.id}>\nOwner: <@!{self.bot.owner_id}>")
         await ctx.send(embed=embed)
 
+    '''
+    # An anti-spam checker made for ThatOtherAndrew, checks if 3 or more messages are being spammed that are mentioning people, then 'deploys a chain chomp'.
+    @Cog.listener()
+    async def on_message(self, message):
+        def _check(m):
+            return (m.author == message.author
+                    and len(m.mentions)
+                    and (datetime.utcnow() - m.created_at).seconds < 60)
+
+        if not message.author.bot:
+            if len(list(filter(lambda m: _check(m), self.bot.cached_messages))) >= 3:  # If we detect spamming
+                await message.channel.send("Don't spam mentions!", delete_after=10)
+                await message.channel.send("https://i.imgur.com/LzDKgZN.png")
+    '''
+
     # End of Cog -------------------------------------------------------------------------------------------------------------------------------
     @Cog.listener()
     async def on_ready(self):

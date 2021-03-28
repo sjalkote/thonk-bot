@@ -22,7 +22,8 @@ help_fun = """
             `?!8ball` - Give a question and the 8-ball will answer!\n
             `?!soup` - Get your fresh soup here!\n
             `?!quote` - Get a random inspirational quote!\n
-            `?!say` - Say something through the bot, supports various emojis from my server! List them with `--emojis`.
+            `?!say` - Say something through the bot, supports various emojis from my server! List them with `--emojis`. It can also send gifs, use `--gifs ` and then the name
+            of a gif in the available gifs! To list available gifs just use `--gifs`.\n
             
 """
 
@@ -88,12 +89,14 @@ class Utility(Cog):
                     await msg.edit(embed=bot.help_pages[current])
 
     # -------------------------------------------------------------------------------------------------------------------------------------
-    # The GitHub Command, gives a link to the github.
-    @commands.command(name="github")
-    async def github(self, ctx):
+    # The Info command, gives the links to relative info such as documentation and the repository.
+    @commands.command(name="info")
+    async def info(self, ctx, *user):
         embed = discord.Embed(title="TechnoShip123", url="http://github.com/TechnoShip123",
-                              description="The link for my github page. The bot repository can be found here:\n https://github.com/TechnoShip123/thonk-bot",
+                              description="The link for my github page is:\n <https://github.com/TechnoShip123>",
                               color=0x00ffbf, timestamp=datetime.utcnow())
+        embed.add_field(name="Bot Repository", value="The bot repository can be found here:\n <https://github.com/TechnoShip123/thonk-bot>")
+        embed.add_field(name="Documentation", value="My documentation can be found at:\n <https://thonkbot.zetasj.com>", inline=False)
 
         embed.set_author(name="TechnoShip123", url="https://avatars.githubusercontent.com/u/75491816?s=460&u=f9d8a3cb1a09ed5cc5e918f04ff0e477bc0fadb9&v=4",
                          icon_url="https://github.com/TechnoShip123/DiscordBot/blob/master/resources/GitHub-Mark-Light-32px.png?raw=true")
@@ -102,7 +105,11 @@ class Utility(Cog):
 
         embed.set_footer(text="Requested by: " + ctx.author.name, icon_url=ctx.author.avatar_url)
 
-        await ctx.send(embed=embed)
+        if user:
+            await ctx.message.delete()
+            await ctx.send(f"{user[0]}, take a look at my information:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
 
     # -------------------------------------------------------------------------------------------------------------------------------------
     # LATENCY COMMAND
