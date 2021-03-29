@@ -12,6 +12,7 @@ from lib.bot.__init__ import bcolors
 
 # -------------------------------------------------------------------------------------------------------------------------------
 help_utility = """
+                `?!help` - The command you're using right now! Get help for the various commands of this bot.\n
                 `?!remind` - Set a reminder for anything, for a duration of 5 minutes to 7 days! Cooldown of 1 use every 5 minutes.\n
                 `?!mcserver` - Check the status of any Minecraft server by simply specifying the IP after the command! Cooldown of one use every 10 seconds.\n
                 `?!ping` - Get the bot's latency.\n
@@ -52,9 +53,30 @@ class Utility(Cog):
     # HELP COMMAND? ---------------------------------------------------------------------------------------------------------------------------
     @command(name="help")
     async def help(self, ctx, *, command):
+        ecolor = int("{:06x}".format(random.randint(0, 0xFFFFFF)), 16)  # Get a random embed color.
+
+        # IF statements for specific help command parameters:
         if command == "help":  # TODO: Do stuff like this for each command, if there is an auto-generated command list then do a for loop (for command in commands)
-            discord.Embed(title="Help Command", description="The help command `?!help` is what you are using right now. It has no aliases."
-                        color = discord.Color.blue(), url="https://thonkbot.zetasj.com")
+            embed = discord.Embed(title="HELP: Help Command", color = ecolor, url="https://thonkbot.zetasj.com", 
+                                description="The help command `?!help` is what you are using right now! It can give a paged embed with a description on all\
+                                     available commands. You can navigate the embed between pages using the reactions below it, only the person that issues the\
+                                          command will be able to control the pages. To see help on a specific command like you are right now, use `?!help <command_name>`.\
+                                               For example, to see help on the remind command, use `?!help remind`.")
+            await ctx.send(embed=embed)
+        elif command == "remind":
+            embed = discord.Embed(title="HELP: Remind Command", color = ecolor, url="https://thonkbot.zetasj.com",
+                                description="The `?!remind` command is a useful tool to get a ping with the reminder description you specify. The limit is\
+                                     from 5 minutes to 7 days. To use the command, use the following syntax: `?!remind <duration> <description>`. For the duration\
+                                         seconds are specified with `s`, minutes are `m`, hours are `h`, and days are `d`. For example, a reminder in 20 minutes about an upcoming\
+                                             exam, could be `?!remind 20m upcoming exam`. The cooldown on this command is 1 use every 5 minutes per user.")
+        elif command == "mcserver":
+            embed = discord.Embed(title="HELP: MC Server Command", color = ecolor, url="https://thonkbot.zetasj.com",
+                                description="The `?!mcserver` command allows you to check the status of any open Minecraft Server! To use the command you need to\
+                                     specify the server IP after the command, for example, `?!mcserver mc.server.net`. If the server is online, you will get info such\
+                                         as the amount of online players, server MOTD, and more. If the server is not online or the IP is invalid, you will get an\
+                                             'invalid or offline' message.")
+        
+        # If no specific command parameter is specified, we give the general help page.
         else:
             buttons = [u"\u23EA", u"\u2B05", u"\u27A1", u"\u23E9"]  # skip to start, left, right, skip to end
             current = 0

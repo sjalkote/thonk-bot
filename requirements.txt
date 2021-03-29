@@ -1,0 +1,7 @@
+discord.py[voice]  # Comes with the PyNaCl library when you use the 'voice' extra, for VC support.
+requests  # For API stuff (should come with urllib3)
+datetime  # For timestamps in embeds.
+asyncio  # For async
+apscheduler  # For jobs
+psutil  # For system information
+discord-py-slash-command  # For slash commands
