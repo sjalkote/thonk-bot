@@ -51,42 +51,46 @@ class Utility(Cog):
 
     # HELP COMMAND? ---------------------------------------------------------------------------------------------------------------------------
     @command(name="help")
-    async def help(self, ctx):
-        buttons = [u"\u23EA", u"\u2B05", u"\u27A1", u"\u23E9"]  # skip to start, left, right, skip to end
-        current = 0
-        msg = await ctx.send(embed=bot.help_pages[current])
-        for button in buttons:
-            await msg.add_reaction(button)
+    async def help(self, ctx, *, command):
+        if command == "help":  # TODO: Do stuff like this for each command, if there is an auto-generated command list then do a for loop (for command in commands)
+            discord.Embed(title="Help Command", description="The help command `?!help` is what you are using right now. It has no aliases."
+                        color = discord.Color.blue(), url="https://thonkbot.zetasj.com")
+        else:
+            buttons = [u"\u23EA", u"\u2B05", u"\u27A1", u"\u23E9"]  # skip to start, left, right, skip to end
+            current = 0
+            msg = await ctx.send(embed=bot.help_pages[current])
+            for button in buttons:
+                await msg.add_reaction(button)
 
-        while True:
-            try:
-                reaction, user = await self.bot.wait_for("reaction_add", check=lambda reaction, user: user == ctx.author and reaction.emoji in buttons, timeout=60.0)
+            while True:
+                try:
+                    reaction, user = await self.bot.wait_for("reaction_add", check=lambda reaction, user: user == ctx.author and reaction.emoji in buttons, timeout=60.0)
 
-            except asyncio.TimeoutError:
-                # return print("test")
-                pass
+                except asyncio.TimeoutError:
+                    # return print("test")
+                    pass
 
-            else:
-                previous_page = current
-                if reaction.emoji == u"\u23EA":
-                    current = 0
+                else:
+                    previous_page = current
+                    if reaction.emoji == u"\u23EA":
+                        current = 0
 
-                elif reaction.emoji == u"\u2B05":
-                    if current > 0:
-                        current -= 1
+                    elif reaction.emoji == u"\u2B05":
+                        if current > 0:
+                            current -= 1
 
-                elif reaction.emoji == u"\u27A1":
-                    if current < len(bot.help_pages) - 1:
-                        current += 1
+                    elif reaction.emoji == u"\u27A1":
+                        if current < len(bot.help_pages) - 1:
+                            current += 1
 
-                elif reaction.emoji == u"\u23E9":
-                    current = len(bot.help_pages) - 1
+                    elif reaction.emoji == u"\u23E9":
+                        current = len(bot.help_pages) - 1
 
-                for button in buttons:
-                    await msg.remove_reaction(button, ctx.author)
+                    for button in buttons:
+                        await msg.remove_reaction(button, ctx.author)
 
-                if current != previous_page:
-                    await msg.edit(embed=bot.help_pages[current])
+                    if current != previous_page:
+                        await msg.edit(embed=bot.help_pages[current])
 
     # -------------------------------------------------------------------------------------------------------------------------------------
     # The Info command, gives the links to relative info such as documentation and the repository.
