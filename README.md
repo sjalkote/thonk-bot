@@ -15,6 +15,9 @@ If you would like to see more projects from me, make sure to check out my [GitHu
 
 The bot's documentation can be found [here](https://thonkbot.zetasj.com).
 
+### Running with Docker
+To run the bot with Docker, I have already supplied a Dockerfile that I use regularily. In case it doesn't work, try running the latest release in the master branch (make sure to open an issue too!).
+
 ### For code use/modification
 You will need to provide a `key.txt` file containing the bot key that you generate from your application in the Discord Developer page. This bot will also contain code for slash-commands so you will need to make sure your bot app has access to them.
 
