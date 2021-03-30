@@ -59,21 +59,7 @@ class OwnerCog(commands.Cog):
                 await message.channel.send("https://i.imgur.com/LzDKgZN.png")
     '''
 
-    # TALK FROM DMS --------------------------------------------------------------------------------
-    @commands.Cog.listener("on_message")
-	async def botspeak(self, msg): 
-		global TALK_CHANNEL, TALK_CHANNEL_OBJECT
-		if (TALK_CHANNEL != None):
-			if (isinstance(msg.channel, discord.channel.DMChannel)) and (msg.author.id == 755093458586173531):
-				if not(msg.content == "?!talkstop"):
-					await TALK_CHANNEL_OBJECT.send(msg.content)
-				else:
-					TALK_CHANNEL = None
-					await msg.reply("Stopped the bot talk!")
-			elif msg.channel.id == TALK_CHANNEL and not (msg.author.id) == 755093458586173531:  # TODO: Convert to built-in owner?
-				await dm_channel.send(f'**{msg.author}:** {msg.content}')
-
-    # End of Cog -------------------------------------------------------------------------------------------------------------------------------
+# End of Cog ----------------------------------------------------------------------------------------------------------------------
     @Cog.listener()
     async def on_ready(self):
         if not self.bot.ready:
