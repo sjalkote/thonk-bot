@@ -1,4 +1,5 @@
 discord.py[voice]  # Comes with the PyNaCl library when you use the 'voice' extra, for VC support.
+discord  # The same as discord.py, just here to satisfy the linter.
 requests  # For API stuff (should come with urllib3)
 datetime  # For timestamps in embeds.
 asyncio  # For async
