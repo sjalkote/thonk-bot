@@ -211,5 +211,4 @@ class Bot(Bot):
             if message.content.lower() == "hello" or message.content.lower() == "hi":
                 await message.add_reaction("👋")
 
-
 bot = Bot()
