@@ -2,6 +2,7 @@ import discord
 import asyncio
 import urllib
 import json
+import random
 from datetime import *
 from discord.ext.commands import Cog
 from discord.ext.commands import *
@@ -57,33 +58,38 @@ class Utility(Cog):
 
     # HELP COMMAND? --------------------------------------------------------------------------------------------------
     @command(name="help")
-    async def help(self, ctx, *, cmdname):
+    async def help(self, ctx, *cmdname):
         ecolor = int("{:06x}".format(random.randint(0, 0xFFFFFF)), 16)  # Get a random embed color.
 
         # IF statements for specific help command parameters:
-        # TODO: Do stuff like this for each command, if there is an auto-generated list then do a `for cmd in commands`
-        if cmdname == "help":
-            embed = discord.Embed(title="HELP: Help Command", color=ecolor, url="https://thonkbot.zetasj.com",
-                                  description="The help command `?!help` is what you are using right now! It can give a paged embed with a description on all\
-                                     available commands. You can navigate the embed between pages using the reactions below it, only the person that issues the\
-                                          command will be able to control the pages. To see help on a specific command like you are right now, use `?!help <command_name>`.\
-                                               For example, to see help on the remind command, use `?!help remind`.")
-            await ctx.send(embed=embed)
+        if cmdname:
+            # TODO: Do stuff like this for each command, if there is an auto-generated list then do a `for cmd in commands`
+            if cmdname[0] == "help":
+                embed = discord.Embed(title="HELP: Help Command", color=ecolor, url="https://thonkbot.zetasj.com",
+                                      description="The help command `?!help` is what you are using right now! It can give a paged embed with a description on all\
+                                         available commands. You can navigate the embed between pages using the reactions below it, only the person that issues the\
+                                              command will be able to control the pages. To see help on a specific command like you are right now, use `?!help <command_name>`.\
+                                                   For example, to see help on the remind command, use `?!help remind`.")
+                await ctx.send(embed=embed)
 
-        elif cmdname == "remind":
-            embed = discord.Embed(title="HELP: Remind Command", color=ecolor, url="https://thonkbot.zetasj.com",
-                                  description="The `?!remind` command is a useful tool to get a ping with the reminder description you specify. The limit is\
-                                     from 5 minutes to 7 days. To use the command, use the following syntax: `?!remind <duration> <description>`. For the duration\
-                                         seconds are specified with `s`, minutes are `m`, hours are `h`, and days are `d`. For example, a reminder in 20 minutes about an upcoming\
-                                             exam, could be `?!remind 20m upcoming exam`. The cooldown on this command is 1 use every 5 minutes per user.")
-            await ctx.send(embed=embed)
-        elif cmdname == "mcserver":
-            embed = discord.Embed(title="HELP: MC Server Command", color=ecolor, url="https://thonkbot.zetasj.com",
-                                  description="The `?!mcserver` command allows you to check the status of any open Minecraft Server! To use the command you need to\
-                                     specify the server IP after the command, for example, `?!mcserver mc.server.net`. If the server is online, you will get info such\
-                                         as the amount of online players, server MOTD, and more. If the server is not online or the IP is invalid, you will get an\
-                                             'invalid or offline' message.")
-            await ctx.send(embed=embed)
+            elif cmdname[0] == "remind":
+                embed = discord.Embed(title="HELP: Remind Command", color=ecolor, url="https://thonkbot.zetasj.com",
+                                      description="The `?!remind` command is a useful tool to get a ping with the reminder description you specify. The limit is\
+                                         from 5 minutes to 7 days. To use the command, use the following syntax: `?!remind <duration> <description>`. For the duration\
+                                             seconds are specified with `s`, minutes are `m`, hours are `h`, and days are `d`. For example, a reminder in 20 minutes about an upcoming\
+                                                 exam, could be `?!remind 20m upcoming exam`. The cooldown on this command is 1 use every 5 minutes per user.")
+                await ctx.send(embed=embed)
+            elif cmdname[0] == "mcserver":
+                embed = discord.Embed(title="HELP: MC Server Command", color=ecolor, url="https://thonkbot.zetasj.com",
+                                      description="The `?!mcserver` command allows you to check the status of any open Minecraft Server! To use the command you need to\
+                                         specify the server IP after the command, for example, `?!mcserver mc.server.net`. If the server is online, you will get info such\
+                                             as the amount of online players, server MOTD, and more. If the server is not online or the IP is invalid, you will get an\
+                                                 'invalid or offline' message.")
+                await ctx.send(embed=embed)
+
+            # If the command does not exist:
+            else:
+                await ctx.send("Sorry, that command does not exist here!")
 
         # If no specific command parameter is specified, we give the general help page.
         else:
@@ -95,9 +101,7 @@ class Utility(Cog):
 
             while True:
                 try:
-                    reaction, user = await self.bot.wait_for("reaction_add", check=lambda reaction,
-                                                                                          user: user == ctx.author and reaction.emoji in buttons,
-                                                             timeout=60.0)
+                    reaction, user = await self.bot.wait_for("reaction_add", check=lambda reaction, user: user == ctx.author and reaction.emoji in buttons, timeout=60.0)
 
                 except asyncio.TimeoutError:
                     # return print("test")
