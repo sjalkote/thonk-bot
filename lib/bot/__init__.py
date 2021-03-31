@@ -210,7 +210,6 @@ class Bot(Bot):
             # If someone says hi.
             if message.content.lower() == "hello" or message.content.lower() == "hi":
                 await message.add_reaction("👋")
-            if message.content.lower() == "bruh":
-                await message.channel.send("<a:thonksplode:820738463828934678> that is very bruh <a:thonksplode:820738463828934678>")
 
+                
 bot = Bot()
