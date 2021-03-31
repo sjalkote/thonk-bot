@@ -46,8 +46,7 @@ class OwnerCog(Cog):
         await ctx.send(embed=embed)
 
     '''
-    # An anti-spam checker made for ThatOtherAndrew, checks if 3 or more messages are being spammed that are mentioning
-     people, then 'deploys a chain chomp'.
+    # An anti-spam checker made for ThatOtherAndrew, checks if 3 or more messages are being spammed that are mentioning people, then 'deploys a chain chomp'.
     @Cog.listener()
     async def on_message(self, message):
         def _check(m):
@@ -61,7 +60,7 @@ class OwnerCog(Cog):
                 await message.channel.send("https://i.imgur.com/LzDKgZN.png")
     '''
 
-# End of Cog -------------------------------------------------------------------------------------------------------
+    # End of Cog -------------------------------------------------------------------------------------------------------------------------------
     @Cog.listener()
     async def on_ready(self):
         if not self.bot.ready:
