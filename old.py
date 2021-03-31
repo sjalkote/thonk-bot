@@ -1,6 +1,7 @@
 # THONK BOT - Created by TechnoShip123 (Thonk), my GitHub page is at https://github.com/TechnoShip123.
 # This code is under the GNU GPL v3 License. LICENSE may not be altered or removed.
 
+
 # Import the needed modules that the bot will use, like discord.py (duh).
 import discord  # For the entire thing
 from discord.ext import commands  # Subset of discord

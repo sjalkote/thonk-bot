@@ -213,5 +213,4 @@ class Bot(Bot):
             if message.content.lower() == "bruh":
                 await message.channel.send("<a:thonksplode:820738463828934678> that is very bruh <a:thonksplode:820738463828934678>")
 
-
 bot = Bot()
