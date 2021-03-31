@@ -17,7 +17,7 @@ help_utility = """
 `?!mcserver` - Check the status of any Minecraft server by simply specifying the IP after the command! Cooldown of one\
  use every 10 seconds.\n
 `?!ping` - Get the bot's latency.\n
-`?!github` - Send a link to my GitHub page.\n
+`?!info` - Send a link to info sources such as the documentation website and my GitHub.\n
 """
 
 help_fun = """
