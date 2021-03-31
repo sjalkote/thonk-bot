@@ -127,7 +127,7 @@ class Utility(Cog):
 
     # ----------------------------------------------------------------------------------------------------------------
     # The Info command, gives the links to relative info such as documentation and the repository.
-    @commands.command(name="info")
+    @commands.command(name="info", aliases=["github"])
     async def info(self, ctx, *user):
         embed = discord.Embed(title="TechnoShip123", url="http://github.com/TechnoShip123",
                               description="The link for my github page is:\n <https://github.com/TechnoShip123>",
