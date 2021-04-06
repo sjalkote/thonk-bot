@@ -63,7 +63,7 @@ class Utility(Cog):
 
         # IF statements for specific help command parameters:
         if cmdname:
-            # TODO: Do stuff like this for each command, if there is an auto-generated list then do a `for cmd in commands`
+
             if cmdname[0] == "help":
                 embed = discord.Embed(title="HELP: Help Command", color=ecolor, url="https://thonkbot.zetasj.com",
                                       description="The help command `?!help` is what you are using right now! It can give a paged embed with a description on all "
