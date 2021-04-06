@@ -21,18 +21,18 @@ class Fun(Cog):
 
     # Hit/Bonk command, fun way to 'hit' others for the specified reason (defaults to no reason if nothing is provided).
     @commands.command(name="bonk", aliases=["hit"], help="'Bonk' someone with objects for specified reasons!")
-    async def hit(self, ctx, member: str, *, reason: Optional[str] = "no reason"):
+    async def bonk(self, ctx, member: str, *, reason: Optional[str] = "no reason"):
         await ctx.message.delete()  # Delete the user message
         object_list = ["a train", "a bat", "some bees", "an acorn", "a truck", "a bulldozer", "a python", "a ban", "a mute", "a kick", "a pie", "GitHub premium", "Octocat",
                        "ThonkBot documentation", "a car", "Minecraft", "Mojang", "Steve", "Alex", "a villager", "a diamond", "an emerald", "Pylint", "Java", "a cookie",
                        "me", "JavaScript", "PHP", "their C drive", "their computer", "some HTML code", "some CSS code", "discord.py documentation", "a wall", "a plane",
                        "a black hole", "a joke", "a wet towel", "the theory of time", "a clock", "Docker", "the Docker whale", "a turtle", "a stick", "their car keys", "a pokemon"]
         if member == "<@!815078851780542484>":  # Check if it's hitting the bot
-            await ctx.send(f"{ctx.author.mention} tried to hit me, but I dodged and yeeted them!")
+            await ctx.send(f"{ctx.author.mention} tried to bonk me, but I dodged and yeeted them!")
         elif member == ctx.author.mention:  # Check if they're hitting themseleves
-            await ctx.send(f"{ctx.author.mention} hit themselves with {random.choice(object_list)} for {reason}.")
+            await ctx.send(f"{ctx.author.mention} bonked themselves with {random.choice(object_list)} for {reason}.")
         else:  # Otherwise continue as normal
-            await ctx.send(f"{ctx.author.mention} hit {member} with {random.choice(object_list)} for {reason}.")
+            await ctx.send(f"{ctx.author.mention} bonked {member} with {random.choice(object_list)} for {reason}.")
 
     # THE SOUP COMMAND ------------------------------------------------------------------------------------------------------------------------------------
     @commands.command(name="soup")
@@ -62,7 +62,7 @@ class Fun(Cog):
 
     # ------------------------------------------------------------------------------------------------------------------------------------------------------
     @commands.command(name="8ball", aliases=["eightball"], help="Just like a real 8 ball!")
-    async def eightball(self, ctx):
+    async def eightball(self, ctx, *question):
         color = int("{:06x}".format(random.randint(0, 0xFFFFFF)), 16)  # RANDOM EMBED COLOR! Makes the embed color random each time!
 
         choices = [
@@ -106,12 +106,22 @@ class Fun(Cog):
 
         ball_choice = random.choice(choices)
 
-        embed = discord.Embed(
-            title="The Magic 8-Ball",
-            description=f"**🎱8-ball:** {ball_choice}",
-            color=color,
-            timestamp=datetime.utcnow()
-        )
+        # Make sure they actually asked a question, otherwise say that they didn't.
+        if not question:
+            embed = discord.Embed(
+                title="The Magic 8-Ball",
+                description=f"**🎱8-ball:** If you have the sense to ask a question then I'll consider answering you.",
+                color=color,
+                timestamp=datetime.utcnow()
+            )
+        else:
+            embed = discord.Embed(
+                title="The Magic 8-Ball",
+                description=f"**🎱8-ball:** {ball_choice}",
+                color=color,
+                timestamp=datetime.utcnow()
+            )
+
         embed.set_footer(text="Requested by: " + ctx.author.name)
         await ctx.reply(embed=embed)
 

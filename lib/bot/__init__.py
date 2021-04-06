@@ -9,7 +9,7 @@ from discord.ext.commands import *
 
 from ..db import db
 
-PREFIX = "?!"
+PREFIX = "?1"
 OWNER_ID = 755093458586173531
 
 COGS = ["utility", "fun", "owner"]  # Update this when you add more cogs.
@@ -73,7 +73,7 @@ class Bot(Bot):
         self.scheduler = AsyncIOScheduler()
 
         db.autosave(self.scheduler)
-        super().__init__(command_prefix=PREFIX, owner_id=OWNER_ID, intents=Intents.all(), help_command=None)  # Basic setup, define the prefix, owner ID, and turn on intents.
+        super().__init__(command_prefix=PREFIX, owner_id=OWNER_ID, intents=Intents.all(), case_insensitive=True, help_command=None)  # Basic setup, define the prefix, owner ID, and turn on intents.
 
     # Setup
     def setup(self):
