@@ -66,25 +66,63 @@ class Utility(Cog):
             # TODO: Do stuff like this for each command, if there is an auto-generated list then do a `for cmd in commands`
             if cmdname[0] == "help":
                 embed = discord.Embed(title="HELP: Help Command", color=ecolor, url="https://thonkbot.zetasj.com",
-                                      description="The help command `?!help` is what you are using right now! It can give a paged embed with a description on all\
-                                         available commands. You can navigate the embed between pages using the reactions below it, only the person that issues the\
-                                              command will be able to control the pages. To see help on a specific command like you are right now, use `?!help <command_name>`.\
-                                                   For example, to see help on the remind command, use `?!help remind`.")
+                                      description="The help command `?!help` is what you are using right now! It can give a paged embed with a description on all "
+                                                  "available commands. You can navigate the embed between pages using the reactions below it, only the person that issues the "
+                                                  "command will be able to control the pages. To see help on a specific command like you are right now, use `?!help <command_name>`. "
+                                                  "For example, to see help on the remind command, use `?!help remind`.")
                 await ctx.send(embed=embed)
 
             elif cmdname[0] == "remind":
                 embed = discord.Embed(title="HELP: Remind Command", color=ecolor, url="https://thonkbot.zetasj.com",
-                                      description="The `?!remind` command is a useful tool to get a ping with the reminder description you specify. The limit is\
-                                         from 5 minutes to 7 days. To use the command, use the following syntax: `?!remind <duration> <description>`. For the duration\
-                                             seconds are specified with `s`, minutes are `m`, hours are `h`, and days are `d`. For example, a reminder in 20 minutes about an upcoming\
-                                                 exam, could be `?!remind 20m upcoming exam`. The cooldown on this command is 1 use every 5 minutes per user.")
+                                      description="The `?!remind` command is a useful tool to get a ping with the reminder description you specify. The limit is "
+                                                  "from 5 minutes to 7 days. To use the command, use the following syntax: `?!remind <duration> <description>`. For the duration "
+                                                  "seconds are specified with `s`, minutes are `m`, hours are `h`, and days are `d`. For example, a reminder in 20 minutes about an upcoming "
+                                                  "exam, could be `?!remind 20m upcoming exam`. The cooldown on this command is 1 use every 5 minutes per user.")
                 await ctx.send(embed=embed)
             elif cmdname[0] == "mcserver":
                 embed = discord.Embed(title="HELP: MC Server Command", color=ecolor, url="https://thonkbot.zetasj.com",
-                                      description="The `?!mcserver` command allows you to check the status of any open Minecraft Server! To use the command you need to\
-                                         specify the server IP after the command, for example, `?!mcserver mc.server.net`. If the server is online, you will get info such\
-                                             as the amount of online players, server MOTD, and more. If the server is not online or the IP is invalid, you will get an\
-                                                 'invalid or offline' message.")
+                                      description="The `?!mcserver` command allows you to check the status of any open Minecraft Server! To use the command you need to "
+                                                  "specify the server IP after the command, for example, `?!mcserver mc.server.net`. If the server is online, you will get info such "
+                                                  "as the amount of online players, server MOTD, and more. If the server is not online or the IP is invalid, you will get an "
+                                                  "'invalid or offline' message.")
+                await ctx.send(embed=embed)
+            elif cmdname[0] == "ping":
+                embed = discord.Embed(title="HELP: Ping Command", color=ecolor, url="https://thonkbot.zetasj.com",
+                                      description="This command simply allows you to check the bot's latency, it will return in milliseconds rounded to a whole number.")
+                await ctx.send(embed=embed)
+            elif cmdname[0] == "info":
+                embed = discord.Embed(title="HELP: Info Command", color=ecolor, url="https://thonkbot.zetasj.com",
+                                      description="This command allows you to get links for relevant sources of info, including my documentation page and the GitHub repository. "
+                                                  "Optionally, you can specify a user after the command (`?!info <user_mention>`) and it will ping that user in the message.")
+                await ctx.send(embed=embed)
+            elif cmdname[0] == "bonk":
+                embed = discord.Embed(title="HELP: Bonk Command", color=ecolor, url="https://thonkbot.zetasj.com",
+                                      description="The bonk command allows you to 'hit' another member for a specified reason with randomly-selected objects! "
+                                                  "The usage of the command is `?!bonk <@member> <reason>`. If you don't specify the reason through usage such as "
+                                                  "`?!bonk <@member>`, it will hit them 'for no reason'.")
+                await ctx.send(embed=embed)
+            elif cmdname[0] == "8ball":
+                embed = discord.Embed(title="HELP: Eight-Ball Command", color=ecolor, url="https://thonkbot.zetasj.com",
+                                      description="Ask the eight-ball a question and it shall give you its insight. The usage is `?!8ball <question>`.")
+                await ctx.send(embed=embed)
+
+            elif cmdname[0] == "soup":
+                embed = discord.Embed(title="HELP: Soup Command", color=ecolor, url="https://thonkbot.zetasj.com",
+                                      description="Get some fresh soup, with a reaction and a message!")
+                await ctx.send(embed=embed)
+
+            elif cmdname[0] == "quote":
+                embed = discord.Embed(title="HELP: Quote Command", color=ecolor, url="https://thonkbot.zetasj.com",
+                                      description="Get a quote from a huge collection provided by the ZenQuotes API! Includes the quote and the author.")
+                await ctx.send(embed=embed)
+
+            elif cmdname[0] == "say":
+                embed = discord.Embed(title="HELP: Say Command", color=ecolor, url="https://thonkbot.zetasj.com",
+                                      description="The say command allows you to say things from the bot, including emojis, or choosing a gif! To view avaialable "
+                                                  "emojis you can use `?!say --emojis`, and it will list them. To view available gifs, use `?!say --gifs`. "
+                                                  "To send a message you can use `?!say <message>`, and add emojis anywhere in the message with `:emojiname:`. "
+                                                  "For gifs, just specify the gif name that it is listed as in the `--gifs` list, but specify that it is a gif, "
+                                                  "otherwise it will assume you are asking to send a message. For example, `?!say --gifs sus`.")
                 await ctx.send(embed=embed)
 
             # If the command does not exist:
