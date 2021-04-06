@@ -9,7 +9,7 @@ from discord.ext.commands import *
 
 from ..db import db
 
-PREFIX = "?1"
+PREFIX = "?!"
 OWNER_ID = 755093458586173531
 
 COGS = ["utility", "fun", "owner"]  # Update this when you add more cogs.
