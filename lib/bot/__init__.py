@@ -40,7 +40,7 @@ class bcolors:
 
 # A conversion command for seconds into hours:minutes:seconds.
 def convert(seconds):
-    seconds = seconds % (24 * 3600)
+    seconds %= 24 * 3600
     hour = seconds // 3600
     seconds %= 3600
     minutes = seconds // 60
@@ -55,7 +55,7 @@ class Ready:
 
     def ready_up(self, cog):
         setattr(self, cog, True)
-        print(bcolors.print_cog + bcolors.print_spec + f"{cog}" + bcolors.ENDC + " cog ready")
+        print(f"{bcolors.print_cog}{bcolors.print_spec}{cog}{bcolors.ENDC} cog ready")
 
     def all_ready(self):
         return all([getattr(self, cog) for cog in COGS])
@@ -82,30 +82,30 @@ class Bot(Bot):
             self.load_extension(f"lib.cogs.{cog}")  # Load the cog from lib.cogs, CHANGE IF DIRECTORY STRUCTURE CHANGES.
             cog_amount += 1  # Raise the counter by one (the first cog will say 1 cog loaded instead of 0).
             # <cogname> loaded! (1)
-            print(bcolors.print_cog + bcolors.print_spec + f"{cog}" + bcolors.ENDC + " loaded! (" + bcolors.HEADER + f"{cog_amount}" + bcolors.ENDC + ")")
-        print(bcolors.print_cog + "All cogs have been loaded! We have a total of " + bcolors.HEADER + f"{cog_amount}" + bcolors.ENDC + " cogs.")
+            print(f"{bcolors.print_cog}{bcolors.print_spec}{cog}{bcolors.ENDC} loaded! ({bcolors.HEADER}{cog_amount}{bcolors.ENDC})")
+        print(f"{bcolors.print_cog}All cogs have been loaded! We have a total of {bcolors.HEADER}{cog_amount}{bcolors.ENDC} cogs.")
 
     # Stuff to setup when we first run the bot.
     def run(self, version):
 
-        print(bcolors.print_info + "Running " + bcolors.print_spec + "setup..." + bcolors.ENDC)
+        print(f"{bcolors.print_info}Running {bcolors.print_spec}setup...{bcolors.ENDC}")
         self.VERSION = version
         self.setup()
 
-        print(bcolors.print_info + bcolors.OKGREEN + bcolors.BOLD + "Setup Complete!" + bcolors.ENDC)
-        print(bcolors.print_info + "Attempting " + bcolors.print_spec + "login..." + bcolors.ENDC)
+        print(f"{bcolors.print_info}{bcolors.OKGREEN}{bcolors.BOLD}Setup Complete!{bcolors.ENDC}")
+        print(f"{bcolors.print_info}Attempting {bcolors.print_spec}login...{bcolors.ENDC}")
         super().run(self.TOKEN, reconnect=True)
 
     # When the bot connects.
     async def on_connect(self):
         # Say that we logged in successfully, and give the username + userid that the bot has logged in as.
         print(f"{bcolors.print_info}{bcolors.print_success}Successful Connection! {bcolors.ENDC}")
-        print(bcolors.print_info + "Logged in as: " + bcolors.OKCYAN + bcolors.HEADER + bcolors.ITALIC + str(bot.user) + bcolors.ENDC)
-        print(bcolors.print_info + "Bot ID: " + bcolors.OKCYAN + bcolors.HEADER + bcolors.ITALIC + f"{bot.user.id}" + bcolors.ENDC)
+        print(f"{bcolors.print_info}Logged in as: {bcolors.OKCYAN}{bcolors.HEADER}{bcolors.ITALIC}{str(bot.user)}{bcolors.ENDC}")
+        print(f"{bcolors.print_info}Bot ID: {bcolors.OKCYAN}{bcolors.HEADER}{bcolors.ITALIC}{bot.user.id}{bcolors.ENDC}")
 
     # When the bot disconnects/stops.
     async def on_disconnect(self):
-        print(bcolors.print_warn + bcolors.WARNING + "The bot has " + bcolors.BOLD + "disconnected!" + bcolors.ENDC)
+        print(f"{bcolors.print_warn}{bcolors.WARNING}The bot has {bcolors.BOLD}disconnected!{bcolors.ENDC}")
 
     # ERROR HANDLING ------------------------------------------------------------------------------------------------------------------
     async def on_error(self, err, *args, **kwargs):
@@ -117,10 +117,6 @@ class Bot(Bot):
         # If the command does not exist/is not found.
         if isinstance(exc, CommandNotFound):
             await ctx.message.add_reaction("<:questionmark:825353476317642752>")
-            message = await ctx.reply("Sorry! That command does not currently exist! You can use `?!help` to view available commands!")
-            await sleep(5)
-            await message.delete()
-            pass
 
         # If it has the attribute `original`
         elif hasattr(exc, "original"):
@@ -159,8 +155,7 @@ class Bot(Bot):
             try:
                 await ctx.send(f"We hit an error! <@!755093458586173531> " + f"""Error:```{exc}```""")
             except Exception as criticalexception:
-                print(f"""{bcolors.FAIL + bcolors.BOLD}Couldn't send error message. error:
-            {criticalexception}{bcolors.ENDC}""")
+                print(f"""{bcolors.FAIL}{bcolors.BOLD}Couldn't send the error message. Error:\n {criticalexception}{bcolors.ENDC}""")
             finally:
                 print(f"{bcolors.FAIL}[ERROR]: {exc}{bcolors.ENDC}")
             raise exc  # So we see this in the terminal.
@@ -184,32 +179,27 @@ class Bot(Bot):
             # print(print_scheduler + "Job Added: " + print_spec + "test_schedule" + bcolors.ENDC)
             self.scheduler.start()
 
-            print(bcolors.print_scheduler + bcolors.print_spec + 'Scheduler' + bcolors.ENDC + ' started!')
+            print(f"{bcolors.print_scheduler}{bcolors.print_spec}Scheduler{bcolors.ENDC} started!")
             status = f"you for ?!"  # The bot status
             await bot.change_presence(activity=discord.Activity(name=status, type=discord.ActivityType.watching))  # Set the bot presence/status
             print(f"{bcolors.print_info}Bot {bcolors.print_spec}status set!{bcolors.ENDC}")
 
-            print(bcolors.print_info + bcolors.OKGREEN + bcolors.BOLD + 'Bot is ready!' + bcolors.ENDC)
+            print(f"{bcolors.print_info}{bcolors.OKGREEN}{bcolors.BOLD}Bot is ready!{bcolors.ENDC}")
             # print('-----------------------------------------------------------------------------------------------------------------')
 
     async def on_message(self, message):
-        # If the message is a command:
-        if message.content.lower().startswith(PREFIX):
-            umessage = message.content.lower().split(" ", 1)
-            print(f"{bcolors.print_com_used}{message.author} used " + umessage[0])
-            await bot.process_commands(message)
-            pass
+        # If the bot gets mentioned or pinged in any way.
+        if bot.user in message.mentions:
+            await message.add_reaction("<:nice:817119421445046293>")
+            await message.channel.send("Yeah that's me, use `?!help` to get a list of commands!")
 
-        # If the message is not a command:
-        else:
-            # If the bot gets mentioned or pinged in any way.
-            if bot.user in message.mentions:
-                await message.add_reaction("<:nice:817119421445046293>")
-                await message.channel.send("Yeah that's me, use `?!help` to get a list of commands!")
+        # If someone says hi.
+        if message.content.lower() == "hello" or message.content.lower() == "hi":
+            await message.add_reaction("👋")
+        await bot.process_commands(message)
 
-            # If someone says hi.
-            if message.content.lower() == "hello" or message.content.lower() == "hi":
-                await message.add_reaction("👋")
+    async def on_command_completion(self, ctx):
+        print(f"{bcolors.OKBLUE}[Command]: {bcolors.ENDC}{bcolors.OKCYAN}{ctx.message.author} issued {bcolors.HEADER}{ctx.message.content}{bcolors.ENDC}")
 
                 
 bot = Bot()

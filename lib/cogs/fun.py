@@ -100,6 +100,7 @@ class Fun(Cog):
             "no... (╯°□°）╯︵ ┻━┻",
             "red is the impostor! wait... what do you mean this is an 8 ball command??",
             "**E.**",
+            "eh",
             "IDK not my problem",
             r"¯\_(ツ)_/¯"
         ]
