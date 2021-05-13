@@ -4,7 +4,6 @@
 *.db
 *.db journal
 .idea
-test.py
 
 
 # Byte-compiled / optimized / DLL files
