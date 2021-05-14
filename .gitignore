@@ -1,6 +1,6 @@
 # MAIN PROGRAM FILES
-token.txt
 test.py
+old.py
 *.db
 *.db journal
 .idea
