@@ -10,7 +10,7 @@ echo "Removed old thonk-bot images!"
 TIMEOUT 1
 
 docker build -t thonk-bot .
-echo "Docker image succesfully built!"
+echo "Docker image successfully built!"
 TIMEOUT 1
 
 docker images

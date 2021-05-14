@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 sudo systemctl start docker
 sleep 1
 
@@ -13,7 +15,7 @@ echo 'Removed old thonk-bot images!'
 sleep 1
 
 docker build -t thonk-bot .
-echo 'Docker image succesfully built!'
+echo 'Docker image successfully built!'
 sleep 1
 
 docker images

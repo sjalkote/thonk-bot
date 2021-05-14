@@ -1,8 +1,9 @@
-import os
 import sys
+
 import discord
 import psutil
 from discord.ext.commands import *
+
 from lib.bot.__init__ import Bcolors
 
 
@@ -19,15 +20,15 @@ class OwnerCog(Cog):
 		await self.bot.close()  # Not a very clean way to stop, but there is a Windows where the bot.stop and logout don't work.
 	
 	# RESTART COMMAND ---------------------------------------------------------------------------
-	@command(name="restart")
-	@is_owner()
-	async def restart(self, ctx):
-		await ctx.reply("Alright, I'm restarting.")
-		try:
-			print("------------------------------------------------------------------------------------------------------------")
-			await self.bot.close()
-		finally:
-			os.system("python3 launcher.py")
+	# @command(name="restart")
+	# @is_owner()
+	# async def restart(self, ctx):
+	# 	await ctx.reply("Alright, I'm restarting.")
+	# 	try:
+	# 		print("------------------------------------------------------------------------------------------------------------")
+	# 		await self.bot.close()
+	# 	finally:
+	# 		os.system("python launcher.py")
 	
 	# STATS COMMAND -----------------------------------------------------------------------------
 	@command(name="botstats")
