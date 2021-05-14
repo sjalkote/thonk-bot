@@ -194,8 +194,6 @@ class Fun(Cog):
 	async def ai(self, ctx, *, content: str):
 		# THANKS TO EGGO-PLANT FOR THE UNIQUE UUID CODE
 		from lib.bot.__init__ import api_key, brain_id
-		bot_id = self.bot.user.id
-		bot_mention = [f'<@{bot_id}>', f'<@!{bot_id}>', f'<@&{bot_id}>']
 		author = str(
 			ctx.message.author.id).encode()  # You can provide a unique identification for users, in this case it's a hash.
 		hashed_author = (hashlib.sha256(author)).hexdigest()  # Hash the Discord user ID
