@@ -1,10 +1,9 @@
 # MAIN PROGRAM FILES
-/token.txt
-/test.py
+token.txt
+test.py
 *.db
 *.db journal
 .idea
-test.py
 
 
 # Byte-compiled / optimized / DLL files
@@ -111,7 +110,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+lib/bot/.env
 .venv
 env/
 venv/
