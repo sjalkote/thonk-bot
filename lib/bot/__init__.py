@@ -69,6 +69,7 @@ class Ready:
 class Bot(Bot):
 	def __init__(self):
 		
+		self.TOKEN = TOKEN
 		self.ready = False
 		self.cogs_ready = Ready()
 		self.PREFIX = PREFIX
@@ -98,7 +99,7 @@ class Bot(Bot):
 		
 		print(f"{Bcolors.print_info}{Bcolors.OKGREEN}{Bcolors.BOLD}Setup Complete!{Bcolors.ENDC}")
 		print(f"{Bcolors.print_info}Attempting {Bcolors.print_spec}login...{Bcolors.ENDC}")
-		super().run(TOKEN, reconnect=True)
+		super().run(self.TOKEN, reconnect=True)
 	
 	# When the bot connects.
 	async def on_connect(self):
