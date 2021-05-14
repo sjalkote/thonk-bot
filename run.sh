@@ -21,11 +21,11 @@ fi
 
 # VALIDATOR STARTS: Check that the necessary files exist to run the bot.
 
-# Check if the token is in the file
-if [ "$(find "lib/bot" -name "token.txt")" ]; then
-    echo -e "\033[0;32m[VALIDATOR]:\033[0m Token file (\033[0;36mtoken.txt\033[0m) was found!"
+# Check if the .env file is available
+if [ "$(find "lib/bot" -name ".env")" ]; then
+    echo -e "\033[0;32m[VALIDATOR]:\033[0m Environment Variable file (\033[0;36m.env\033[0m) was found!"
 else
-    echo -e "\033[0;31m[WARNING]: Token file (token.txt) not found!\033[0m"
+    echo -e "\033[0;31m[WARNING]: Environment Variable file (.env) not found!\033[0m"
     sleep 2
     exit 1
 fi
