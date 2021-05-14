@@ -1,12 +1,18 @@
+import os
 from asyncio import sleep
 
-import discord
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord import *
 from discord.ext.commands import *
-
+from dotenv import load_dotenv
 from ..db import db
 
+import discord
+
+load_dotenv()  # TODO: MAYBE MOVE TO ROOT DIR?
+api_key = os.getenv('API_KEY')
+brain_id = os.getenv('BRAIN_ID')
+print(api_key)
 PREFIX = "?1"
 OWNER_ID = 755093458586173531
 

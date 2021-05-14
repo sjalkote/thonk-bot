@@ -6,3 +6,4 @@ asyncio  # For async
 apscheduler  # For jobs
 psutil  # For system information
 discord-py-slash-command  # For slash commands
+python-dotenv # For .env file variables
