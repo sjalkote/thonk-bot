@@ -63,7 +63,7 @@ sure that the following are available in the file:
 
 If you're unsure of what to do, just paste the following into the file (make sure to replace the placeholders with the proper information!):
 
-```dotenv
+```python
 TOKEN="<TOKEN GOES HERE>"
 PREFIX="<PREFIX GOES HERE>"
 API_KEY="<BRAINSHOP API KEY GOES HERE>"
