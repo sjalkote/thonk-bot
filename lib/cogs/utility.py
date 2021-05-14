@@ -225,7 +225,7 @@ class Utility(Cog):
 	
 	# ----------------------------------------------------------------------------------------------------------------
 	# LATENCY COMMAND
-	@commands.command(name="ping", aliases=["latency"], help="Gets the bot latency", case_insensitive=True)
+	@commands.command(name="ping", aliases=["latency"], help="Gets the bot latency")
 	async def ping(self, ctx):
 		await ctx.send(f'🏓 Pong! Latency is **{round(self.bot.latency * 1000)}ms**.')
 	

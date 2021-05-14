@@ -77,8 +77,8 @@ class Bot(Bot):
 		self.scheduler = AsyncIOScheduler()
 		
 		db.autosave(self.scheduler)
-		super().__init__(command_prefix=PREFIX, owner_id=OWNER_ID, intents=Intents.all(), case_insensitive=True,
-		                 help_command=None)  # Basic setup, define the prefix, owner ID, and turn on intents.
+		# Basic setup, define the prefix, owner ID, and turn on intents:
+		super().__init__(command_prefix=PREFIX, owner_id=OWNER_ID, intents=Intents.all(), case_insensitive=True, help_command=None)
 	
 	# Setup
 	def setup(self):
