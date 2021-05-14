@@ -195,7 +195,7 @@ class Fun(Cog):
 		# THANKS TO EGGO-PLANT FOR THE UNIQUE UUID CODE
 		from lib.bot.__init__ import api_key, brain_id
 		author = str(
-			ctx.message.author.id).encode()  # You can provide a unique identification for users, in this case it's a hash.
+			ctx.message.author.id).encode()  # You can provide a unique identification for users, in this case it's a hash of their ID.
 		hashed_author = (hashlib.sha256(author)).hexdigest()  # Hash the Discord user ID
 		user_input = content.replace(" ", "%20")
 		response = requests.get(f'http://api.brainshop.ai/get?bid={brain_id}&key={api_key}&uid={hashed_author}&msg={user_input}').json()
@@ -203,7 +203,7 @@ class Fun(Cog):
 		bot_response = response['cnt']
 		async with ctx.message.channel.typing():
 			await asyncio.sleep(0.5, 2)
-		await ctx.send(bot_response)
+		await ctx.reply(bot_response)
 	
 	# ------------------------------------------------------------------------------------------------------------------------------------
 	@Cog.listener()

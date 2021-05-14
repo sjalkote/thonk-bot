@@ -200,7 +200,7 @@ class Bot(Bot):
 	
 	async def on_message(self, message):
 		# If the bot gets mentioned or pinged in any way.
-		if bot.user in message.mentions:
+		if message.author != bot.user and f"<@{bot.user.id}>" in message.content or f"<@!{bot.user.id}>" in message.content:
 			await message.add_reaction("<:nice:817119421445046293>")
 			await message.channel.send("Yeah that's me, use `?!help` to get a list of commands!")
 			
