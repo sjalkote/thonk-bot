@@ -12,9 +12,8 @@ import discord
 load_dotenv()  # TODO: MAYBE MOVE TO ROOT DIR?
 api_key = os.getenv('API_KEY')
 brain_id = os.getenv('BRAIN_ID')
-prefix = os.getenv('PREFIX')
-print(api_key)
-PREFIX = prefix
+PREFIX = os.getenv('PREFIX')
+TOKEN = os.getenv('TOKEN')
 OWNER_ID = 755093458586173531
 
 COGS = ["utility", "fun", "owner"]  # Update this when you add more cogs.
@@ -69,8 +68,6 @@ class Ready:
 # noinspection PyAttributeOutsideInit
 class Bot(Bot):
 	def __init__(self):
-		with open("./lib/bot/token.txt", "r", encoding="utf-8") as token_file:
-			self.TOKEN = token_file.readline()
 		
 		self.ready = False
 		self.cogs_ready = Ready()
@@ -101,7 +98,7 @@ class Bot(Bot):
 		
 		print(f"{Bcolors.print_info}{Bcolors.OKGREEN}{Bcolors.BOLD}Setup Complete!{Bcolors.ENDC}")
 		print(f"{Bcolors.print_info}Attempting {Bcolors.print_spec}login...{Bcolors.ENDC}")
-		super().run(self.TOKEN, reconnect=True)
+		super().run(TOKEN, reconnect=True)
 	
 	# When the bot connects.
 	async def on_connect(self):
@@ -205,6 +202,11 @@ class Bot(Bot):
 		if bot.user in message.mentions:
 			await message.add_reaction("<:nice:817119421445046293>")
 			await message.channel.send("Yeah that's me, use `?!help` to get a list of commands!")
+			
+		# If someone pings M.D.S.P
+		if "<@812516048628613130>" in message.content or "<@!812516048628613130>" in message.content:
+			await message.channel.send("._. Did you really just ping them...")
+			await message.add_reaction("<:notlikerowlet:841366316594102302>")
 		
 		# If someone says hi.
 		elif message.content.lower() == "hello" or message.content.lower() == "hi":
@@ -212,7 +214,8 @@ class Bot(Bot):
 		await bot.process_commands(message)
 	
 	async def on_command_completion(self, ctx):
-		print(f"{Bcolors.OKBLUE}[Command]: {Bcolors.ENDC}{Bcolors.OKCYAN}{ctx.message.author} issued {Bcolors.HEADER}"
+		print(f"{Bcolors.OKGREEN}[Guild]: {Bcolors.ENDC+Bcolors.ITALIC + Bcolors.OKCYAN}{ctx.author.guild.name}{Bcolors.ENDC} "
+		      f"{Bcolors.OKBLUE}[Command]: {Bcolors.ENDC+Bcolors.OKCYAN}{ctx.message.author} issued {Bcolors.HEADER}"
 		      f"{ctx.message.content}{Bcolors.ENDC}")
 
 
