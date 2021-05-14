@@ -12,8 +12,9 @@ import discord
 load_dotenv()  # TODO: MAYBE MOVE TO ROOT DIR?
 api_key = os.getenv('API_KEY')
 brain_id = os.getenv('BRAIN_ID')
+prefix = os.getenv('PREFIX')
 print(api_key)
-PREFIX = "?1"
+PREFIX = prefix
 OWNER_ID = 755093458586173531
 
 COGS = ["utility", "fun", "owner"]  # Update this when you add more cogs.
