@@ -2,7 +2,7 @@
 ![Lines of code](https://img.shields.io/tokei/lines/github/TechnoShip123/thonk-bot?style=for-the-badge&label=Total%20Lines&logo=pycharm&logoColor=lightgreen)
 ![GitHub language count](https://img.shields.io/github/languages/count/TechnoShip123/thonk-bot?label=Languages&logo=python&style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/TechnoShip123/thonk-bot?logo=gnu&style=for-the-badge)
-![Website](https://img.shields.io/website?down_color=lightgrey&down_message=Offline&label=Website&logo=html5&style=for-the-badge&up_color=green&up_message=Online&url=https%3A%2F%2Fthonkbot.zetasj.com)
+[![Website](https://img.shields.io/website?down_color=lightgrey&down_message=Offline&label=Website&logo=html5&style=for-the-badge&up_color=green&up_message=Online&url=https%3A%2F%2Fthonkbot.zetasj.com)](https://thonkbot.zetasj.com)
 
 # Thonk Bot
 
