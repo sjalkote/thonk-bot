@@ -91,10 +91,9 @@ class Bot(Bot):
 		print(f"{Bcolors.print_cog}All cogs have been loaded! We have a total of {Bcolors.HEADER}{cog_amount}{Bcolors.ENDC} cogs.")
 	
 	# Stuff to setup when we first run the bot.
-	def run(self, version):
+	def run(self):
 		
 		print(f"{Bcolors.print_info}Running {Bcolors.print_spec}setup...{Bcolors.ENDC}")
-		self.VERSION = version
 		self.setup()
 		
 		print(f"{Bcolors.print_info}{Bcolors.OKGREEN}{Bcolors.BOLD}Setup Complete!{Bcolors.ENDC}")
