@@ -1,11 +1,10 @@
+import asyncio
 import hashlib
 import json
 import random
 from datetime import *
 from typing import Optional
 
-import asyncio
-import os
 import discord
 import requests
 from discord.ext import commands
@@ -193,12 +192,12 @@ class Fun(Cog):
 	@commands.command(name="ai")
 	async def ai(self, ctx, *, content: str):
 		# THANKS TO EGGO-PLANT FOR THE UNIQUE UUID CODE
-		from lib.bot.__init__ import api_key, brain_id
+		from lib.bot.__init__ import brain_api_key, brain_id
 		author = str(
 			ctx.message.author.id).encode()  # You can provide a unique identification for users, in this case it's a hash of their ID.
 		hashed_author = (hashlib.sha256(author)).hexdigest()  # Hash the Discord user ID
-		user_input = content.replace(" ", "%20")
-		response = requests.get(f'http://api.brainshop.ai/get?bid={brain_id}&key={api_key}&uid={hashed_author}&msg={user_input}').json()
+		umessage = content.replace(" ", "%20")
+		response = requests.get(f'http://api.brainshop.ai/get?bid={brain_id}&key={brain_api_key}&uid={hashed_author}&msg={umessage}').json()
 		
 		bot_response = response['cnt']
 		async with ctx.message.channel.typing():

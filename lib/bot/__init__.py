@@ -10,7 +10,7 @@ from ..db import db
 import discord
 
 load_dotenv()  # TODO: MAYBE MOVE TO ROOT DIR?
-api_key = os.getenv('API_KEY')
+brain_api_key = os.getenv('BRAIN_API_KEY')
 brain_id = os.getenv('BRAIN_ID')
 PREFIX = os.getenv('PREFIX')
 TOKEN = os.getenv('TOKEN')
