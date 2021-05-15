@@ -6,7 +6,6 @@ import urllib
 from datetime import *
 
 import discord
-from discord.ext import commands
 from discord.ext.commands import *
 from discord.ext.commands.cooldowns import *
 
@@ -27,6 +26,8 @@ help_fun = """
 `?!quote` - Get a random inspirational quote!\n
 `?!say` - Say something through the bot, supports various emojis from my server! List them with `--emojis`. It can also\
  send gifs, use `--gifs ` and then the name of a gif in the available gifs! To list available gifs just use `--gifs`.\n
+`?!ai` - Talk to ThonkBot, an AI! Use `?!ai ` then write your message, and ThonkBot will reply! It is user specific so\n
+it can remember things about you, like if you tell it a name.
 
 """
 
@@ -196,7 +197,7 @@ class Utility(Cog):
 	
 	# ----------------------------------------------------------------------------------------------------------------
 	# The Info command, gives the links to relative info such as documentation and the repository.
-	@commands.command(name="info", aliases=["github"])
+	@command(name="info", aliases=["github"])
 	async def info(self, ctx, *user):
 		embed = discord.Embed(title="TechnoShip123", url="http://github.com/TechnoShip123",
 		                      description="The link for my github page is:\n <https://github.com/TechnoShip123>",
@@ -225,17 +226,15 @@ class Utility(Cog):
 	
 	# ----------------------------------------------------------------------------------------------------------------
 	# LATENCY COMMAND
-	@commands.command(name="ping", aliases=["latency"], help="Gets the bot latency")
+	@command(name="ping", aliases=["latency"], help="Gets the bot latency")
 	async def ping(self, ctx):
 		await ctx.send(f'🏓 Pong! Latency is **{round(self.bot.latency * 1000)}ms**.')
 	
 	# ----------------------------------------------------------------------------------------------------------------
 	# THE REMINDER COMMAND. Specify when you want to be reminded, and the bot will ping you on that time.
 	# noinspection PyUnboundLocalVariable
-	@commands.cooldown(1, 150, commands.BucketType.user)  # Cooldown of 2 uses every 150 seconds per user.
-	@command(name="remind", aliases=["reminder, remindme"],
-	         help="This command allows you to set a remind from 5 minutes to 7 days! Specify your value like 5m for 5 "
-	              "minutes.")
+	@cooldown(1, 150, BucketType.user)  # Cooldown of 2 uses every 150 seconds per user.
+	@command(name="remind", aliases=["reminder, remindme"])
 	async def remind(self, ctx, time, *, reminder):
 		
 		user = "<@!" + str(ctx.author.id) + ">"
@@ -313,7 +312,7 @@ class Utility(Cog):
         icon_url=ctx.author.avatar_url ) await ctx.send(embed=embed) """
 	
 	# MC Server ------------------------------------------------------------------------------------------------------
-	@commands.cooldown(1, 10, BucketType.user)
+	@cooldown(1, 10, BucketType.user)
 	@command(name="mcserver", help="Allows you to check the status of any specified Minecraft Server!")
 	async def mcserver(self, ctx, argument: str):
 		# Pull the ip/text they sent (auto separated from command).
