@@ -27,7 +27,11 @@ help_fun = """
 `?!say` - Say something through the bot, supports various emojis from my server! List them with `--emojis`. It can also\
  send gifs, use `--gifs ` and then the name of a gif in the available gifs! To list available gifs just use `--gifs`.\n
 `?!ai` - Talk to ThonkBot, an AI! Use `?!ai ` then write your message, and ThonkBot will reply! It is user specific so\n
-it can remember things about you, like if you tell it a name.
+it can remember things about you, like if you tell it a name.\n
+`?!selfmute` - Need to focus and get some work done? With the self-mute command, you can mute yourself for 10 seconds to 1 day!\
+All you need to do is specify the time you want to stay muted, for example: `?!selfmute 1h` for 1 hour. Valid time format examples:\
+`10s` for ten seconds, `10m` for ten minutes, and `10h` for ten hours. If you try to mute yourself for longer than 12 hours, you will\
+need to add `--confirm` at the end of the command to confirm that you will be muted however long you specified.\n
 
 """
 
@@ -403,6 +407,61 @@ class Utility(Cog):
 		await message.channel.send(
 			f"Voting is done and option {most_voted.emoji} was the most popular with {most_voted.count - 1:,} votes!")
 		self.polls.remove((message.channel.id, message.id))
+	
+	# SELF MUTE COMMAND -------------------------------------------------------
+	@command(name="selfmute")
+	async def selfmute(self, ctx, time):
+		
+		user = ctx.author  # Shortcut for the user
+		# Try for an uppercase or lowercase `muted` role.
+		try:
+			role = discord.utils.get(ctx.guild.roles, name="muted")
+		except AttributeError:
+			role = discord.utils.get(ctx.guild.roles, name="Muted")
+		for channel in ctx.guild.channels:  # Set the permission for each channel on the muted role
+			await channel.set_permissions(role, speak=False, send_messages=False, read_message_history=True, read_messages=False)
+		embed = discord.Embed(color=0xe44e4e, timestamp=datetime.utcnow())
+		seconds = 0
+		
+		# Calculate the mute duration
+		if time[:-1].isnumeric() is False:
+			self.remind.reset_cooldown(ctx)
+			embed.add_field(name='Invalid Duration',
+			                value="Please specify a valid time! For example, `5m` for 5 minutes, or `35s` for 35 seconds!")
+		elif user != ctx.author:
+			await ctx.send("That isn't you! You can only mute yourself!")
+		else:
+			if time.lower().endswith("h"):
+				seconds += int(time[:-1]) * 60 * 60
+				counter = f"{seconds // 60 // 60} hour(s)"
+			elif time.lower().endswith("m"):
+				seconds += int(time[:-1]) * 60
+				counter = f"{seconds // 60} minute(s)"
+			elif time.lower().endswith("s"):
+				seconds += int(time[:-1])
+				counter = f"{seconds} second(s)"
+			if seconds == 0:
+				embed.add_field(name='Invalid Duration!',
+				                value='Please specify a proper duration, `?!selfmute <time>`. For example, `?!selfmute 1m`.')
+				self.remind.reset_cooldown(ctx)
+				await ctx.send(embed=embed)
+			elif seconds < 10:
+				embed.add_field(name='Duration Too Small!',
+				                value="That's too short for a self-mute!\nThe minimum duration is 10 seconds.")
+				self.remind.reset_cooldown(ctx)
+				await ctx.send(embed=embed)
+			elif seconds > 86400:
+				embed.add_field(name='Duration Too Large!',
+				                value='You have specified too long of a self-mute!\nThe maximum duration is 1 day.')
+				self.remind.reset_cooldown(ctx)
+				await ctx.send(embed=embed)
+			else:
+				await user.add_roles(role, reason="e")
+				await ctx.reply(f"You have been muted for {counter}! You will be automatically unmuted afterwards.")
+				await asyncio.sleep(seconds)
+				await user.remove_roles(role, reason="e")
+				await ctx.send(f"Time's up <@!{user.id}>! You have been unmuted!")
+				return
 	
 	@Cog.listener()
 	async def on_ready(self):
