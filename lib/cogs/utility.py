@@ -413,7 +413,7 @@ class Utility(Cog):
 	async def selfmute(self, ctx, time, *confirmation: str):
 		user = ctx.author  # Shortcut for the user
 		# Try for an uppercase or lowercase `muted` role.
-		try:
+		try:  #TODO: REACT TO REMOVE MUTE
 			role = discord.utils.get(ctx.guild.roles, name="self-muted")
 		except AttributeError:
 			await ctx.send("Please make a role in the server called `self-muted`.")
