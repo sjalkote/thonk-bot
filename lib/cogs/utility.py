@@ -414,9 +414,9 @@ class Utility(Cog):
 		user = ctx.author  # Shortcut for the user
 		# Try for an uppercase or lowercase `muted` role.
 		try:
-			role = discord.utils.get(ctx.guild.roles, name="Muted")
+			role = discord.utils.get(ctx.guild.roles, name="self-muted")
 		except AttributeError:
-			role = discord.utils.get(ctx.guild.roles, name="muted")  # TODO: DOES NOT WORK
+			await ctx.send("Please make a role in the server called `self-muted`.")
 		# for channel in ctx.guild.channels:  # Set the permission for each channel on the muted role
 		# 	await channel.set_permissions(role, speak=False, send_messages=False, read_message_history=True, read_messages=False)
 		embed = discord.Embed(color=0xe44e4e, timestamp=datetime.utcnow())
