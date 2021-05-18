@@ -410,7 +410,7 @@ class Utility(Cog):
 	
 	# SELF MUTE COMMAND -------------------------------------------------------
 	@command(name="selfmute")
-	async def selfmute(self, ctx, time):
+	async def selfmute(self, ctx, time, *confirmation: str):
 		
 		user = ctx.author  # Shortcut for the user
 		# Try for an uppercase or lowercase `muted` role.
@@ -450,11 +450,30 @@ class Utility(Cog):
 				                value="That's too short for a self-mute!\nThe minimum duration is 10 seconds.")
 				self.remind.reset_cooldown(ctx)
 				await ctx.send(embed=embed)
-			elif seconds > 86400:
-				embed.add_field(name='Duration Too Large!',
-				                value='You have specified too long of a self-mute!\nThe maximum duration is 1 day.')
-				self.remind.reset_cooldown(ctx)
-				await ctx.send(embed=embed)
+			elif seconds > 43200:
+				if not confirmation:
+					embed.add_field(name="Confirm your duration!",
+					                value=f"WARNING: Are you sure you want to self-mute for {counter}? If so, add `-y` to the end of the "
+					                      f"command. For example: `?!selfmute 12h -y`")
+					await ctx.send(embed=embed)
+				elif confirmation[0] == "-y" or confirmation[0] == "-yes" or confirmation[0] == "-confirm":
+					await user.add_roles(role, reason="e")
+					await ctx.reply(f"You have been muted for {counter}! You will be automatically unmuted afterwards.")
+					await asyncio.sleep(seconds)
+					await user.remove_roles(role, reason="e")
+					await ctx.send(f"Time's up <@!{user.id}>! You have been unmuted!")
+					return
+				else:
+					embed.add_field(name="Invalid confirmation!",
+					                value=f"Your confirmation is invalid! It should be `-y`, `-yes`, or `-confirm`.")
+					await ctx.send(embed=embed)
+					
+				# If the duration is larger than 24 hours.
+				if seconds > 86400:
+					embed.add_field(name='Duration Too Large!',
+					                value='You have specified too long of a self-mute!\nThe maximum duration is 1 day.')
+					self.remind.reset_cooldown(ctx)
+					await ctx.send(embed=embed)
 			else:
 				await user.add_roles(role, reason="e")
 				await ctx.reply(f"You have been muted for {counter}! You will be automatically unmuted afterwards.")
