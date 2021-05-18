@@ -411,7 +411,6 @@ class Utility(Cog):
 	# SELF MUTE COMMAND -------------------------------------------------------
 	@command(name="selfmute")
 	async def selfmute(self, ctx, time, *confirmation: str):
-		
 		user = ctx.author  # Shortcut for the user
 		# Try for an uppercase or lowercase `muted` role.
 		try:
@@ -430,6 +429,8 @@ class Utility(Cog):
 			                value="Please specify a valid time! For example, `5m` for 5 minutes, or `35s` for 35 seconds!")
 		elif user != ctx.author:
 			await ctx.send("That isn't you! You can only mute yourself!")
+		elif int(time[:-1]) > 86400:
+			await ctx.send("That's too long!")
 		else:
 			if time.lower().endswith("h"):
 				seconds += int(time[:-1]) * 60 * 60
