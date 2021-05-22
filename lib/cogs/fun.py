@@ -145,7 +145,6 @@ class Fun(Cog):
 			await ctx.send(quote)  # Send the quote that we randomly chose from ZenQuotes
 	
 	# SAY COMMAND ------------------------------------------------------------------------------------------------------------------------
-	@is_owner()
 	@commands.command(name="say", aliases=["nitro", "emoji", "gif"])
 	async def say(self, ctx, *, content: str):  # Put the wildcard before content to capture everything after the prefix
 		await ctx.message.delete()
