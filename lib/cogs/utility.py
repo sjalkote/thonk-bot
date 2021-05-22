@@ -451,7 +451,7 @@ class Utility(Cog):
 				                value="That's too short for a self-mute!\nThe minimum duration is 10 seconds.")
 				self.remind.reset_cooldown(ctx)
 				await ctx.send(embed=embed)
-			elif seconds > 43200:
+			elif 43200 < seconds < 86400:
 				if not confirmation:
 					embed.add_field(name="Confirm your duration!",
 					                value=f"WARNING: Are you sure you want to self-mute for {counter}? If so, add `-y` to the end of the "
@@ -475,12 +475,98 @@ class Utility(Cog):
 					                value='You have specified too long of a self-mute!\nThe maximum duration is 1 day.')
 					self.remind.reset_cooldown(ctx)
 					await ctx.send(embed=embed)
+			elif seconds > 86400:
+				await ctx.send("That's too long! The maximum duration is 24 hours!")
 			else:
 				await user.add_roles(role, reason="e")
 				await ctx.reply(f"You have been muted for {counter}! You will be automatically unmuted afterwards.")
 				await asyncio.sleep(seconds)
 				await user.remove_roles(role, reason="e")
 				await ctx.send(f"Time's up <@!{user.id}>! You have been unmuted!")
+				return
+	
+	@is_owner()
+	@command(name="isohelp")
+	async def isohelp(self, ctx, *user):
+		role = discord.utils.get(ctx.guild.roles, name="isolation")
+		if user:
+			await user[0].remove_roles(role)
+		else:
+			await ctx.author.remove_roles(role)
+			
+	@command(name="isolate")
+	async def isolate(self, ctx, time, *confirmation: str):
+		user = ctx.author  # Shortcut for the user
+		# Try for an uppercase or lowercase `muted` role.
+		try:  # TODO: REACT TO REMOVE MUTE
+			role = discord.utils.get(ctx.guild.roles, name="isolation")
+		except CommandInvokeError:  # TODO: ADD CORO
+			await ctx.send("Please make a role in the server called `isolation`.")
+		
+		embed = discord.Embed(color=0xe44e4e, timestamp=datetime.utcnow())
+		seconds = 0
+		
+		# Calculate the mute duration
+		if time[:-1].isnumeric() is False:
+			self.remind.reset_cooldown(ctx)
+			embed.add_field(name='Invalid Duration',
+			                value="Please specify a valid time! For example, `5m` for 5 minutes, or `35s` for 35 seconds!")
+		elif user != ctx.author:
+			await ctx.send("That isn't you! You can only isolate yourself!")
+		elif int(time[:-1]) > 86400:
+			await ctx.send("That's too long!")
+		else:
+			if time.lower().endswith("h"):
+				seconds += int(time[:-1]) * 60 * 60
+				counter = f"{seconds // 60 // 60} hour(s)"
+			elif time.lower().endswith("m"):
+				seconds += int(time[:-1]) * 60
+				counter = f"{seconds // 60} minute(s)"
+			elif time.lower().endswith("s"):
+				seconds += int(time[:-1])
+				counter = f"{seconds} second(s)"
+			if seconds == 0:
+				embed.add_field(name='Invalid Duration!',
+				                value='Please specify a proper duration, `?!isolate <time>`. For example, `?!isolate 1m`.')
+				self.remind.reset_cooldown(ctx)
+				await ctx.send(embed=embed)
+			elif seconds < 10:
+				embed.add_field(name='Duration Too Small!',
+				                value="That's too short for an isolation!\nThe minimum duration is 10 seconds.")
+				self.remind.reset_cooldown(ctx)
+				await ctx.send(embed=embed)
+			elif 43200 < seconds < 86400:
+				if not confirmation:
+					embed.add_field(name="Confirm your duration!",
+					                value=f"WARNING: Are you sure you want to isoalte yourself for {counter}? If so, add `-y` to the end of"
+					                      f"  the command. For example: `?!isolate 12h -y`")
+					await ctx.send(embed=embed)
+				elif confirmation[0] == "-y" or confirmation[0] == "-yes" or confirmation[0] == "-confirm":
+					await user.add_roles(role, reason="e")
+					await ctx.reply(f"You have been isolated for {counter}! You will automatically be taken out of isolation afterwards.")
+					await asyncio.sleep(seconds)
+					await user.remove_roles(role, reason="e")
+					await ctx.send(f"Time's up <@!{user.id}>! Your isolation has been removed!")
+					return
+				else:
+					embed.add_field(name="Invalid confirmation!",
+					                value=f"Your confirmation is invalid! It should be `-y`, `-yes`, or `-confirm`.")
+					await ctx.send(embed=embed)
+				
+				# If the duration is larger than 24 hours.
+				if seconds > 86400:
+					embed.add_field(name='Duration Too Large!',
+					                value='You have specified too long of an isolation!\nThe maximum duration is 1 day.')
+					self.remind.reset_cooldown(ctx)
+					await ctx.send(embed=embed)
+			elif seconds > 86400:
+				await ctx.send("That's too long! The maximum duration is 24 hours!")
+			else:
+				await user.add_roles(role, reason="e")
+				await ctx.reply(f"You have been isolated for {counter}! Your isolation will automatically be removed afterwards.")
+				await asyncio.sleep(seconds)
+				await user.remove_roles(role, reason="e")
+				await ctx.send(f"Time's up <@!{user.id}>! Your isolation has been removed!")
 				return
 	
 	@Cog.listener()
