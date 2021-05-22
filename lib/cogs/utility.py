@@ -484,15 +484,6 @@ class Utility(Cog):
 				await user.remove_roles(role, reason="e")
 				await ctx.send(f"Time's up <@!{user.id}>! You have been unmuted!")
 				return
-	
-	@is_owner()
-	@command(name="isohelp")
-	async def isohelp(self, ctx, *user):
-		role = discord.utils.get(ctx.guild.roles, name="isolation")
-		if user:
-			await user[0].remove_roles(role)
-		else:
-			await ctx.author.remove_roles(role)
 			
 	@command(name="isolate")
 	async def isolate(self, ctx, time, *confirmation: str):
