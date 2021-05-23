@@ -488,11 +488,12 @@ class Utility(Cog):
 	@command(name="isolate")
 	async def isolate(self, ctx, time, *confirmation: str):
 		user = ctx.author  # Shortcut for the user
-		# Try for an uppercase or lowercase `muted` role.
+		# Try for an uppercase or lowercase `muted` isolation_role.
 		try:  # TODO: REACT TO REMOVE MUTE
-			role = discord.utils.get(ctx.guild.roles, name="isolation")
+			isolation_role = discord.utils.get(ctx.guild.roles, name="isolation")
+			mute_role = discord.utils.get(ctx.guild.roles, name="self-mute")
 		except CommandInvokeError:  # TODO: ADD CORO
-			await ctx.send("Please make a role in the server called `isolation`.")
+			await ctx.send("Please make a isolation_role in the server called `isolation`.")
 		
 		embed = discord.Embed(color=0xe44e4e, timestamp=datetime.utcnow())
 		seconds = 0
@@ -533,10 +534,12 @@ class Utility(Cog):
 					                      f"  the command. For example: `?!isolate 12h -y`")
 					await ctx.send(embed=embed)
 				elif confirmation[0] == "-y" or confirmation[0] == "-yes" or confirmation[0] == "-confirm":
-					await user.add_roles(role, reason="e")
+					await user.add_roles(isolation_role, reason="e")
+					await user.add_roles(mute_role, reason="e")
 					await ctx.reply(f"You have been isolated for {counter}! You will automatically be taken out of isolation afterwards.")
 					await asyncio.sleep(seconds)
-					await user.remove_roles(role, reason="e")
+					await user.remove_roles(isolation_role, reason="e")
+					await user.remove_roles(mute_role, reason="e")
 					await ctx.send(f"Time's up <@!{user.id}>! Your isolation has been removed!")
 					return
 				else:
@@ -553,10 +556,12 @@ class Utility(Cog):
 			elif seconds > 86400:
 				await ctx.send("That's too long! The maximum duration is 24 hours!")
 			else:
-				await user.add_roles(role, reason="e")
+				await user.add_roles(isolation_role, reason="e")
+				await user.add_roles(mute_role, reason="e")
 				await ctx.reply(f"You have been isolated for {counter}! Your isolation will automatically be removed afterwards.")
 				await asyncio.sleep(seconds)
-				await user.remove_roles(role, reason="e")
+				await user.remove_roles(isolation_role, reason="e")
+				await user.remove_roles(mute_role, reason="e")
 				await ctx.send(f"Time's up <@!{user.id}>! Your isolation has been removed!")
 				return
 	
